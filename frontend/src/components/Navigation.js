@@ -17,7 +17,7 @@ const Navitaion = ({ isLoggedIn, setIsLoggedIn }) => {
     <div>
       <h2>navigation</h2>
       <ul>
-        {location.pathname != '/' ? (
+        {location.pathname !== '/' ? (
           <li onClick={() => history.push('/')}>홈</li>
         ) : (
           ''
