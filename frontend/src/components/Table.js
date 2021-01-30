@@ -4,6 +4,9 @@ import TableRow from 'components/TableRow';
 const Table = ({ tabledatas }) => {
   const [isAsc, setIsAsc] = useState(true);
   const [newTabledatas, setNewTabledatas] = useState([]);
+
+  console.log(tabledatas);
+
   useEffect(() => {
     const tempTabledatas = [];
     tabledatas.forEach((element) => {

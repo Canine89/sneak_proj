@@ -1,5 +1,6 @@
 from django.db import models
 from core import models as core_models
+from taggit.managers import TaggableManager
 
 
 class Book(core_models.TimeStampedModel):
@@ -10,6 +11,9 @@ class Book(core_models.TimeStampedModel):
     right_price = models.IntegerField(null=True, blank=True)
     sales_price = models.IntegerField(null=True, blank=True)
     isbn = models.IntegerField(null=True, blank=True)
+    url = models.CharField(max_length=1024, default="none", null=False)
+    page = models.IntegerField(null=True, blank=True)
+    tags = TaggableManager()
 
     def __str__(self):
         return self.title

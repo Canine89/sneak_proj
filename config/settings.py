@@ -56,6 +56,8 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "rest_auth",
     "rest_auth.registration",
+    "taggit",  # 태그 검색
+    "taggit_serializer",  # 태그 시리얼라이저
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -167,3 +169,6 @@ ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_LOGOUT_ON_GET = True
 SITE_ID = 1
+
+# taggit 대•소 구분 하지 않음
+TAGGIT_CASE_INSENSITIVE = True

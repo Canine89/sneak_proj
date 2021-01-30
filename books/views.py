@@ -20,6 +20,8 @@ class ListYes24MetaDatas(APIView):
     def get(self, request, format=None):
         yes24_top20_metadatas = models.MetaData.objects.filter(market="yes24")[0:20]
 
+        print(yes24_top20_metadatas[0].book.tags.all())
+
         serializer = serializers.MetaDataSerializer(
             yes24_top20_metadatas,
             many=True,
