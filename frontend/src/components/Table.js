@@ -11,13 +11,14 @@ const Table = ({ tabledatas }) => {
     const tempTabledatas = [];
     tabledatas.forEach((element) => {
       const {
+        title,
         author,
         isbn,
         publish_date,
         publisher,
         right_price,
         sales_price,
-        title,
+        tags,
       } = element.book;
       const { market, rank, sales_point } = element;
       tempTabledatas.push({
@@ -31,6 +32,7 @@ const Table = ({ tabledatas }) => {
         market,
         rank,
         sales_point,
+        tags,
       });
     });
     setNewTabledatas(tempTabledatas);
@@ -43,6 +45,7 @@ const Table = ({ tabledatas }) => {
         title={tabledata.title}
         publisher={tabledata.publisher}
         market={tabledata.market}
+        tags={tabledata.tags}
       />
     );
   });
