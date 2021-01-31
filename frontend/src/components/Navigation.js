@@ -2,8 +2,6 @@ import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
 const Navitaion = ({ isLoggedIn, setIsLoggedIn }) => {
-  console.log('Navigation isLoggedIn: ' + isLoggedIn);
-
   const history = useHistory();
   const location = useLocation();
 

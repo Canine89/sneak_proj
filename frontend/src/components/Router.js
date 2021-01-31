@@ -10,7 +10,6 @@ import Aladin from 'routes/Aladin';
 import Navitaion from 'components/Navigation';
 
 const AppRouter = ({ isLoggedIn, setIsLoggedIn }) => {
-  console.log('router isLoggedIn: ' + isLoggedIn);
   return (
     <Router>
       <Navitaion isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
