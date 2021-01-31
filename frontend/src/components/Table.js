@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import TableRow from 'components/TableRow';
+import Search from 'components/Search';
+import Paging from 'components/Paging';
 
 const Table = ({ tabledatas }) => {
   const [isAsc, setIsAsc] = useState(true);
@@ -11,7 +13,7 @@ const Table = ({ tabledatas }) => {
   const [page, setPage] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState('');
 
-  // set OriginTabledatas
+  // 최초 테이블 데이터 초기화 함수
   useEffect(() => {
     const tempTabledatas = [];
     tabledatas.forEach((element) => {
@@ -43,7 +45,7 @@ const Table = ({ tabledatas }) => {
     setOriginTabledatas(tempTabledatas);
   }, []);
 
-  // change searchTabledatas
+  // 테이블 데이터 검색 로직 함수
   useEffect(() => {
     if (searchKeyword === '') {
       setSearchTabledatas(originTabledatas);
@@ -51,7 +53,6 @@ const Table = ({ tabledatas }) => {
       // search logic...
       const temp = originTabledatas.reduce((acc, curr) => {
         for (var key in curr) {
-          console.log(typeof curr[key]);
           if (
             typeof curr[key] == 'string' &&
             curr[key].indexOf(searchKeyword) >= 0
@@ -66,12 +67,11 @@ const Table = ({ tabledatas }) => {
     }
   }, [searchKeyword, originTabledatas]);
 
-  // rendering tabledata
+  // 테이블 데이터 렌더링 함수
   useEffect(() => {
     setRenderingTabledatas(
       searchTabledatas.slice(page * numberOfPage, numberOfPage * (page + 1)),
     );
-    console.log(originTabledatas);
   }, [isAsc, searchTabledatas, numberOfPage, page]);
 
   const tableRows = renderingTabledatas.map((tabledata, index) => {
@@ -87,7 +87,7 @@ const Table = ({ tabledatas }) => {
     );
   });
 
-  // paging 함수
+  // 페이징 함수
   const tablePaging = () => {
     const tableLength = searchTabledatas.length;
     const pagingLength = Math.ceil(tableLength / numberOfPage);
@@ -134,16 +134,9 @@ const Table = ({ tabledatas }) => {
     setOrderTarget(orderTarget);
   };
 
-  // 검색 함수
-  const changeKeyword = (event) => {
-    const keyword = event.target.value;
-    setSearchKeyword(keyword);
-  };
-
   return (
     <>
-      <span>검색(beta 기능): </span>
-      <input type="text" value={searchKeyword} onChange={changeKeyword} />
+      <Search setSearchKeyword={setSearchKeyword} />
       <table>
         <thead>
           <tr>
@@ -164,8 +157,9 @@ const Table = ({ tabledatas }) => {
           </tr>
         </thead>
         <tbody>{tableRows}</tbody>
-        <span>{tablePaging(20)}</span>
       </table>
+      <span>{tablePaging()}</span>
+      <Paging setNumberOfPage={setNumberOfPage} setPage={setPage} />
     </>
   );
 };
