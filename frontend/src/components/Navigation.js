@@ -20,7 +20,7 @@ const Navitaion = ({ isLoggedIn, setIsLoggedIn }) => {
         ) : (
           ''
         )}
-        {isLoggedIn ? <li onClick={onClick}>로그아웃</li> : ''}
+        s{isLoggedIn ? <li onClick={onClick}>로그아웃</li> : ''}
         {isLoggedIn ? (
           <li onClick={() => history.push('/everymarket')}>
             분석기(전체 서점)
