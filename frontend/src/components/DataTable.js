@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import TableRow from 'components/TableRow';
+import DataTableRow from 'components/DataTableRow';
 import Search from 'components/Search';
 import Paging from 'components/Paging';
+import { Table } from 'react-bootstrap';
+import 'statics/dist/scss/datatable.scss';
 
-const Table = ({ tabledatas }) => {
+const DataTable = ({ tabledatas }) => {
   const [isAsc, setIsAsc] = useState(true);
   const [orderTarget, setOrderTarget] = useState('');
   const [originTabledatas, setOriginTabledatas] = useState([]);
@@ -74,9 +76,9 @@ const Table = ({ tabledatas }) => {
     );
   }, [isAsc, searchTabledatas, numberOfPage, page]);
 
-  const tableRows = renderingTabledatas.map((tabledata, index) => {
+  const DataTableRows = renderingTabledatas.map((tabledata, index) => {
     return (
-      <TableRow
+      <DataTableRow
         key={index}
         rank={tabledata.rank}
         title={tabledata.title}
@@ -137,7 +139,7 @@ const Table = ({ tabledatas }) => {
   return (
     <>
       <Search setSearchKeyword={setSearchKeyword} />
-      <table>
+      <Table striped hover size="sm">
         <thead>
           <tr>
             <th onClick={changeOrder} data-key="rank">
@@ -156,12 +158,12 @@ const Table = ({ tabledatas }) => {
             <th>tags</th>
           </tr>
         </thead>
-        <tbody>{tableRows}</tbody>
-      </table>
+        <tbody>{DataTableRows}</tbody>
+      </Table>
       <span>{tablePaging()}</span>
       <Paging setNumberOfPage={setNumberOfPage} setPage={setPage} />
     </>
   );
 };
 
-export default Table;
+export default DataTable;

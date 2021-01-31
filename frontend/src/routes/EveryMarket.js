@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Table from 'components/Table';
+import DataTable from 'components/DataTable';
 import axios from 'axios';
 
 const EveryMarket = () => {
@@ -22,7 +22,7 @@ const EveryMarket = () => {
     getBooksData();
   }, []);
 
-  return <>{isLoading ? 'loading...' : <Table tabledatas={data} />}</>;
+  return <>{isLoading ? 'loading...' : <DataTable tabledatas={data} />}</>;
 };
 
 export default EveryMarket;
