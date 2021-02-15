@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import DataTable from 'components/DataTable';
 import axios from 'axios';
+import { CircularProgress, Center } from '@chakra-ui/react';
+
 const Easyspub = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -18,7 +20,17 @@ const Easyspub = () => {
     getBooksData();
   }, []);
 
-  return <>{isLoading ? 'loading...' : <DataTable tabledatas={data} />}</>;
+  return (
+    <>
+      {isLoading ? (
+        <Center h="768px">
+          <CircularProgress isIndeterminate />
+        </Center>
+      ) : (
+        <DataTable tabledatas={data} />
+      )}
+    </>
+  );
 };
 
 export default Easyspub;

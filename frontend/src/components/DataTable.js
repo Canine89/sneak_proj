@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import DataTableRow from 'components/DataTableRow';
 import Search from 'components/Search';
 import Paging from 'components/Paging';
-import { Table } from 'react-bootstrap';
-import 'statics/dist/scss/datatable.scss';
+
+import { Table, Grid, Thead, Tbody, Tr, Th } from '@chakra-ui/react';
 
 const DataTable = ({ tabledatas }) => {
   const [isAsc, setIsAsc] = useState(true);
@@ -137,32 +137,32 @@ const DataTable = ({ tabledatas }) => {
   };
 
   return (
-    <>
+    <Grid>
       <Search setSearchKeyword={setSearchKeyword} />
-      <Table striped hover size="sm">
-        <thead>
-          <tr>
-            <th onClick={changeOrder} data-key="rank">
+      <Table striped size="sm">
+        <Thead>
+          <Tr>
+            <Th onClick={changeOrder} data-key="rank">
               rank {orderTarget === 'rank' ? (isAsc ? '▲' : '▼') : null}
-            </th>
-            <th onClick={changeOrder} data-key="title">
+            </Th>
+            <Th onClick={changeOrder} data-key="title">
               title {orderTarget === 'title' ? (isAsc ? '▲' : '▼') : null}
-            </th>
-            <th onClick={changeOrder} data-key="publisher">
+            </Th>
+            <Th onClick={changeOrder} data-key="publisher">
               publisher{' '}
               {orderTarget === 'publisher' ? (isAsc ? '▲' : '▼') : null}
-            </th>
-            <th onClick={changeOrder} data-key="market">
+            </Th>
+            <Th onClick={changeOrder} data-key="market">
               market {orderTarget === 'market' ? (isAsc ? '▲' : '▼') : null}
-            </th>
-            <th>tags</th>
-          </tr>
-        </thead>
-        <tbody>{DataTableRows}</tbody>
+            </Th>
+            <Th>tags</Th>
+          </Tr>
+        </Thead>
+        <Tbody>{DataTableRows}</Tbody>
       </Table>
       <span>{tablePaging()}</span>
       <Paging setNumberOfPage={setNumberOfPage} setPage={setPage} />
-    </>
+    </Grid>
   );
 };
 
