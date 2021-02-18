@@ -4,6 +4,7 @@ import Search from 'components/Search';
 import Paging from 'components/Paging';
 
 import { Table, Grid, Thead, Tbody, Tr, Th } from '@chakra-ui/react';
+import { Button, ButtonGroup } from '@chakra-ui/react';
 
 const DataTable = ({ tabledatas }) => {
   const [isAsc, setIsAsc] = useState(true);
@@ -94,13 +95,14 @@ const DataTable = ({ tabledatas }) => {
     const tableLength = searchTabledatas.length;
     const pagingLength = Math.ceil(tableLength / numberOfPage);
     const paging = [...Array(pagingLength).keys()];
+
     return (
       <ul>
         {paging.map((element, index) => {
           return (
-            <li key={index} onClick={() => setPage(element)}>
+            <Button key={index} onClick={() => setPage(element)} size="xs">
               {element + 1}
-            </li>
+            </Button>
           );
         })}
       </ul>
@@ -160,7 +162,7 @@ const DataTable = ({ tabledatas }) => {
         </Thead>
         <Tbody>{DataTableRows}</Tbody>
       </Table>
-      <span>{tablePaging()}</span>
+      <ButtonGroup spacing="1">{tablePaging()}</ButtonGroup>
       <Paging setNumberOfPage={setNumberOfPage} setPage={setPage} />
     </Grid>
   );

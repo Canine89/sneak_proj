@@ -5,9 +5,9 @@ from . import models, serializers
 
 class ListEveryMarketMetaDatas(APIView):
     def get(self, request, format=None):
-        yes24_top20_metadatas = models.MetaData.objects.filter(market="yes24")[0:20]
-        kyobo_top20_metadatas = models.MetaData.objects.filter(market="kyobo")[0:20]
-        aladin_top20_metadatas = models.MetaData.objects.filter(market="aladin")[0:20]
+        yes24_top20_metadatas = models.MetaData.objects.filter(market="yes24")
+        kyobo_top20_metadatas = models.MetaData.objects.filter(market="kyobo")
+        aladin_top20_metadatas = models.MetaData.objects.filter(market="aladin")
 
         serializer = serializers.MetaDataSerializer(
             yes24_top20_metadatas | kyobo_top20_metadatas | aladin_top20_metadatas,
@@ -18,7 +18,7 @@ class ListEveryMarketMetaDatas(APIView):
 
 class ListYes24MetaDatas(APIView):
     def get(self, request, format=None):
-        yes24_top20_metadatas = models.MetaData.objects.filter(market="yes24")[0:20]
+        yes24_top20_metadatas = models.MetaData.objects.filter(market="yes24")
 
         print(yes24_top20_metadatas[0].book.tags.all())
 
@@ -31,7 +31,7 @@ class ListYes24MetaDatas(APIView):
 
 class ListKyoboMetaDatas(APIView):
     def get(self, request, format=None):
-        kyobo_top20_metadatas = models.MetaData.objects.filter(market="kyobo")[0:20]
+        kyobo_top20_metadatas = models.MetaData.objects.filter(market="kyobo")
 
         serializer = serializers.MetaDataSerializer(
             kyobo_top20_metadatas,
@@ -42,7 +42,7 @@ class ListKyoboMetaDatas(APIView):
 
 class ListAladinMetaDatas(APIView):
     def get(self, request, format=None):
-        aladin_top20_metadatas = models.MetaData.objects.filter(market="aladin")[0:20]
+        aladin_top20_metadatas = models.MetaData.objects.filter(market="aladin")
 
         serializer = serializers.MetaDataSerializer(
             aladin_top20_metadatas,
@@ -55,7 +55,7 @@ class ListEasyspubMetaDatas(APIView):
     def get(self, request, format=None):
         easyspub_top20_metadatas = models.MetaData.objects.filter(
             book__publisher="easyspub"
-        )[0:20]
+        )
 
         serializer = serializers.MetaDataSerializer(
             easyspub_top20_metadatas,

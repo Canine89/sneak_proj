@@ -58,6 +58,7 @@ THIRD_PARTY_APPS = [
     "rest_auth.registration",
     "taggit",  # 태그 검색
     "taggit_serializer",  # 태그 시리얼라이저
+    "django_extensions",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS

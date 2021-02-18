@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button, ButtonGroup } from '@chakra-ui/react';
 
 const Paging = ({ setNumberOfPage, setPage }) => {
   const [number, setNumber] = useState(20);
@@ -11,20 +12,20 @@ const Paging = ({ setNumberOfPage, setPage }) => {
   };
 
   return (
-    <div>
-      <button onClick={onClick} value="10">
+    <ButtonGroup spacing="2">
+      <Button onClick={onClick} value="10" size="sm">
         10
-      </button>
-      <button onClick={onClick} value="20">
+      </Button>
+      <Button onClick={onClick} value="20" size="sm">
         20
-      </button>
-      <button onClick={onClick} value="50">
+      </Button>
+      <Button onClick={onClick} value="50" size="sm">
         50
-      </button>
-      <button onClick={onClick} value="100">
+      </Button>
+      <Button onClick={onClick} value="100" size="sm">
         100
-      </button>
-    </div>
+      </Button>
+    </ButtonGroup>
   );
 };
 
