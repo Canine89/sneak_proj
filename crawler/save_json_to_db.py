@@ -66,20 +66,26 @@ def save_data(datas):
         # market = value["market"]
         market = "yes24"
 
-        book = book_models.Book.objects.create(
-            title=title,
-            author=author,
-            publisher=publisher,
-            publish_date=publish_date,
-            right_price=right_price,
-            sales_price=sales_price,
-            isbn=isbn,
-            url=url,
-            page=page,
-        )
+        try:
+            book = book_models.Book.objects.get(isbn=isbn)
+            print("이미 등록된 책이므로 DB 등록을 넘어갑니다.")
+        except:
+            book = book_models.Book.objects.create(
+                title=title,
+                author=author,
+                publisher=publisher,
+                publish_date=publish_date,
+                right_price=right_price,
+                sales_price=sales_price,
+                isbn=isbn,
+                url=url,
+                page=page,
+            )
 
-        for tag in tags:
-            book.tags.add(tag)
+            for tag in tags:
+                book.tags.add(tag)
+
+            print("새 책의 DB 등록을 마쳤습니다.")
 
         book_models.MetaData.objects.create(
             market=market, rank=rank, sales_point=sales_point, book=book
