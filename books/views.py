@@ -1,13 +1,28 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from . import models, serializers
+import datetime
+
+# datetime 계산용
+now_datetime = datetime.datetime.now()
+start_datetime = now_datetime - datetime.timedelta(
+    hours=now_datetime.hour,
+    minutes=now_datetime.minute,
+    seconds=now_datetime.second,
+)
 
 
 class ListEveryMarketMetaDatas(APIView):
     def get(self, request, format=None):
-        yes24_top20_metadatas = models.MetaData.objects.filter(market="yes24")
-        kyobo_top20_metadatas = models.MetaData.objects.filter(market="kyobo")
-        aladin_top20_metadatas = models.MetaData.objects.filter(market="aladin")
+        yes24_top20_metadatas = models.MetaData.objects.filter(
+            market="yes24", created_at__range=(start_datetime, datetime.datetime.now())
+        )
+        kyobo_top20_metadatas = models.MetaData.objects.filter(
+            market="kyobo", created_at__range=(start_datetime, datetime.datetime.now())
+        )
+        aladin_top20_metadatas = models.MetaData.objects.filter(
+            market="aladin", created_at__range=(start_datetime, datetime.datetime.now())
+        )
 
         serializer = serializers.MetaDataSerializer(
             yes24_top20_metadatas | kyobo_top20_metadatas | aladin_top20_metadatas,

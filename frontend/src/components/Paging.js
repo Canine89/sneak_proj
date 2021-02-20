@@ -12,7 +12,7 @@ const Paging = ({ setNumberOfPage, setPage }) => {
   };
 
   return (
-    <ButtonGroup spacing="2">
+    <ButtonGroup spacing="2" mt={2}>
       <Button onClick={onClick} value="10" size="sm">
         10
       </Button>

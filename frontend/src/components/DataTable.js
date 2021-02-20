@@ -97,7 +97,7 @@ const DataTable = ({ tabledatas }) => {
     const paging = [...Array(pagingLength).keys()];
 
     return (
-      <ul>
+      <ButtonGroup spacing="1" mt={2}>
         {paging.map((element, index) => {
           return (
             <Button key={index} onClick={() => setPage(element)} size="xs">
@@ -105,7 +105,7 @@ const DataTable = ({ tabledatas }) => {
             </Button>
           );
         })}
-      </ul>
+      </ButtonGroup>
     );
   };
 
@@ -162,7 +162,7 @@ const DataTable = ({ tabledatas }) => {
         </Thead>
         <Tbody>{DataTableRows}</Tbody>
       </Table>
-      <ButtonGroup spacing="1">{tablePaging()}</ButtonGroup>
+      {tablePaging()}
       <Paging setNumberOfPage={setNumberOfPage} setPage={setPage} />
     </Grid>
   );

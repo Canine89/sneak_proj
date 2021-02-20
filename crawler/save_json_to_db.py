@@ -6,7 +6,7 @@ import django
 import sys
 from django.conf import settings
 
-fileName = "./yes24_2020_1028_0826_33.json"
+fileName = "./" + str(input())
 
 sys.path.append("/Users/canine/Documents/dev/sneak_proj/")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
@@ -47,17 +47,25 @@ def make_nospace_string(string_data):
 
 
 def save_data(datas):
+    # datetime 계산용
+    now_datetime = datetime.datetime.now()
+    start_datetime = now_datetime - datetime.timedelta(
+        hours=now_datetime.hour,
+        minutes=now_datetime.minute,
+        seconds=now_datetime.second,
+    )
+
     for key, value in datas.items():
         title = value["title"]
         author = value["author"]
         publisher = value["publisher"]
-        publish_date = make_datetime_from_string(value["publish_date"])
-        right_price = make_right_price(value["sales_price"])
+        publish_date = make_datetime_from_string(value["date_of_publish"])
+        right_price = make_right_price(value["price"])
         sales_price = int(right_price * 0.9)
-        isbn = make_integer_from_string(value["isbn"])
+        isbn = make_integer_from_string(value["ISBN"])
         url = value["url"]
         page = make_integer_from_string(value["page"])
-        tags = value["tags"]
+        tags = value["category_of_yes24"]
 
         rank = value["rank"]
         sales_point = make_integer_from_string(value["selling_point"])
@@ -87,9 +95,23 @@ def save_data(datas):
 
             print("새 책의 DB 등록을 마쳤습니다.")
 
-        book_models.MetaData.objects.create(
-            market=market, rank=rank, sales_point=sales_point, book=book
-        )
+        if book is not None:
+            try:
+                if (
+                    book_models.MetaData.objects.filter(
+                        book=book,
+                        created_at__range=(start_datetime, datetime.datetime.now()),
+                    )[0].created_at
+                    > start_datetime
+                ):
+                    print("오늘 등록된 Metadata이므로 DB에 등록하지 않습니다.")
+            except:
+                print("이전에 등록된 Metadata가 없으므로 DB에 등록합니다.")
+                book_models.MetaData.objects.create(
+                    market=market, rank=rank, sales_point=sales_point, book=book
+                )
+        else:
+            print("책 정보가 없어 MetaData를 DB에 등록할 수 없습니다.")
 
 
 if __name__ == "__main__":
