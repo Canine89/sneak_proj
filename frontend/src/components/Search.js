@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Input, Button, Grid, GridItem } from '@chakra-ui/react';
+import { Checkbox, Stack } from "@chakra-ui/react"
 
-const Search = ({ setSearchKeyword }) => {
+
+const Search = ({ setSearchKeyword, setDoSearchTitle, setDoSearchPublisher, setDoSearchTags }) => {
   const [keyword, setKeyword] = useState('');
   const onChange = (event) => {
     const {
@@ -11,6 +13,19 @@ const Search = ({ setSearchKeyword }) => {
       setKeyword(value);
     }
   };
+
+  const onChangeDoSearchTitle = (event) => {
+    console.log(event.target.checked);
+    setDoSearchTitle(event.target.checked);
+  }
+
+  const onChangeDoSearchPublisher = (event) => {
+    setDoSearchPublisher(event.target.checked);
+  }
+
+  const onChangeDoSearchTags = (event) => {
+    setDoSearchTags(event.target.checked);
+  }
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -33,6 +48,11 @@ const Search = ({ setSearchKeyword }) => {
             onChange={onChange}
           />
         </GridItem>
+        <Stack spacing={1} direction="row">
+          <Checkbox onChange={onChangeDoSearchTitle}>제목</Checkbox>
+          <Checkbox onChange={onChangeDoSearchPublisher}>출판사</Checkbox>
+          <Checkbox onChange={onChangeDoSearchTags}>카테고리+태그</Checkbox>
+        </Stack>
         <Button type="submit">검색!</Button>
       </Grid>
     </form>

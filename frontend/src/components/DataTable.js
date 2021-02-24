@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DataTableRow from 'components/DataTableRow';
 import Search from 'components/Search';
 import Paging from 'components/Paging';
+import axios from 'axios';
 
 import { Table, Grid, Thead, Tbody, Tr, Th } from '@chakra-ui/react';
 import { Button, ButtonGroup } from '@chakra-ui/react';
@@ -15,6 +16,9 @@ const DataTable = ({ tabledatas }) => {
   const [numberOfPage, setNumberOfPage] = useState(20);
   const [page, setPage] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [doSearchTitle, setDoSearchTitle] = useState(false);
+  const [doSearchPublisher, setDoSearchPublisher] = useState(false);
+  const [doSearchTags, setDoSearchTags] = useState(false);
 
   // 최초 테이블 데이터 초기화 함수
   useEffect(() => {
@@ -46,27 +50,51 @@ const DataTable = ({ tabledatas }) => {
       });
     });
     setOriginTabledatas(tempTabledatas);
-  }, [originTabledatas]);
+  }, []);
 
   // 테이블 데이터 검색 로직 함수
   useEffect(() => {
     if (searchKeyword === '') {
       setSearchTabledatas(originTabledatas);
     } else {
-      // search logic...
-      const temp = originTabledatas.reduce((acc, curr) => {
-        for (var key in curr) {
-          if (
-            typeof curr[key] == 'string' &&
-            curr[key].indexOf(searchKeyword) >= 0
-          ) {
-            acc.push(curr);
-            break;
-          }
-        }
-        return acc;
-      }, []);
-      setSearchTabledatas(temp);
+      const temp = [];
+      const getBooksData = async () => {
+        console.log(doSearchTitle, doSearchPublisher, doSearchTags);
+        const result = await axios.get('http://localhost:8000/books/search/?keyword=' + searchKeyword + '&title=' + doSearchTitle + '&publisher=' + doSearchPublisher + '&tags=' + doSearchTags, {
+          headers: {
+            Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
+          },
+        });
+        console.log(result.data);
+        result.data.forEach((element) => {
+          const {
+            title,
+            author,
+            isbn,
+            publish_date,
+            publisher,
+            right_price,
+            sales_price,
+            tags,
+          } = element.book;
+          const { market, rank, sales_point } = element;
+          temp.push({
+            author,
+            isbn,
+            publish_date,
+            publisher,
+            right_price,
+            sales_price,
+            title,
+            market,
+            rank,
+            sales_point,
+            tags,
+          });
+        });
+        setSearchTabledatas(temp);
+      };
+      getBooksData();
     }
   }, [searchKeyword, originTabledatas]);
 
@@ -140,7 +168,7 @@ const DataTable = ({ tabledatas }) => {
 
   return (
     <Grid>
-      <Search setSearchKeyword={setSearchKeyword} />
+      <Search setSearchKeyword={setSearchKeyword} setDoSearchTitle={setDoSearchTitle} setDoSearchPublisher={setDoSearchPublisher} setDoSearchTags={setDoSearchTags} />
       <Table striped size="sm">
         <Thead>
           <Tr>

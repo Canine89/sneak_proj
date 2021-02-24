@@ -24,3 +24,6 @@ class MetaData(core_models.TimeStampedModel):
     rank = models.IntegerField(null=True, blank=True)
     sales_point = models.IntegerField(null=True, blank=True)
     book = models.ForeignKey("Book", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.book.title

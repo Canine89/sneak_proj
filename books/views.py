@@ -12,6 +12,25 @@ start_datetime = now_datetime - datetime.timedelta(
 )
 
 
+class SearchMarketMetaDatas(APIView):
+    def get(self, request, format=None):
+        keyword = request.query_params.get("keyword", None)
+        doTitle = request.query_params.get("doTitle", None)
+        doPublisher = request.query_params.get("doPublisher", None)
+        doTags = request.query_params.get("doTags", None)
+
+        if doTitle == "true" and doPublisher == "false" and doTags == "false":
+            search_metadatas = models.MetaData.objects.filter(
+                book__title__icontains=keyword
+            )
+
+        serializer = serializers.MetaDataSerializer(
+            search_metadatas,
+            many=True,
+        )
+        return Response(data=serializer.data)
+
+
 class ListEveryMarketMetaDatas(APIView):
     def get(self, request, format=None):
         yes24_top20_metadatas = models.MetaData.objects.filter(

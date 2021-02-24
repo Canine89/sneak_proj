@@ -22,4 +22,8 @@ urlpatterns = [
         regex=r"easyspub",
         view=views.ListEasyspubMetaDatas.as_view(),
     ),
+    url(
+        regex=r"search",
+        view=views.SearchMarketMetaDatas.as_view(),
+    ),
 ]
