@@ -46,7 +46,7 @@ const DataTable = ({ tabledatas }) => {
       });
     });
     setOriginTabledatas(tempTabledatas);
-  }, []);
+  }, [originTabledatas]);
 
   // 테이블 데이터 검색 로직 함수
   useEffect(() => {

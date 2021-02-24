@@ -8,7 +8,7 @@ from django.conf import settings
 
 fileName = "./" + str(input())
 
-sys.path.append("/Users/canine/Documents/dev/sneak_proj/")
+sys.path.append("/Users/canine/sneak_proj/")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 django.setup()
 from books import models as book_models
@@ -59,16 +59,15 @@ def save_data(datas):
         title = value["title"]
         author = value["author"]
         publisher = value["publisher"]
-        publish_date = make_datetime_from_string(value["date_of_publish"])
-        right_price = make_right_price(value["price"])
-        sales_price = int(right_price * 0.9)
-        isbn = make_integer_from_string(value["ISBN"])
+        publish_date = make_datetime_from_string(value["publish_date"])
+        right_price = value["right_price"]
+        sales_price = value["sales_price"]
+        isbn = value["isbn"]
         url = value["url"]
-        page = make_integer_from_string(value["page"])
-        tags = value["category_of_yes24"]
-
+        page = value["page"]
+        tags = value["tags"]
         rank = value["rank"]
-        sales_point = make_integer_from_string(value["selling_point"])
+        sales_point = value["sales_point"]
 
         # 임시로 yes24로 등록(크롤러 업데이트 후 다음 코드로 변경 예정)
         # market = value["market"]
