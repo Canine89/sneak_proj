@@ -114,6 +114,7 @@ class Crawler:
                 )
 
                 # publisher
+                # span으로 처리한 링크 없는 저자 이름을 위해 try...except 문 삽입
                 result_data[bookinfo_key]["author"] = []
                 try:
                     authors = soup.select(
