@@ -5,10 +5,12 @@ import os
 import django
 import sys
 from django.conf import settings
+from pathlib import Path
+
 
 fileName = "./" + str(input())
 
-sys.path.append("/Users/canine/sneak_proj/")
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 django.setup()
 from books import models as book_models
