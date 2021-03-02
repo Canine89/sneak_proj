@@ -15,13 +15,27 @@ start_datetime = now_datetime - datetime.timedelta(
 class SearchMarketMetaDatas(APIView):
     def get(self, request, format=None):
         keyword = request.query_params.get("keyword", None)
-        doTitle = request.query_params.get("doTitle", None)
-        doPublisher = request.query_params.get("doPublisher", None)
-        doTags = request.query_params.get("doTags", None)
+        doTitle = request.query_params.get("title", None)
+        doPublisher = request.query_params.get("publisher", None)
+        doTags = request.query_params.get("tags", None)
+        search_metadatas = None
+
+        if doTitle == "false" and doPublisher == "false" and doTags == "false":
+            search_metadatas = models.MetaData.objects.filter(
+                book__title__icontains=keyword,
+                created_at__range=(start_datetime, datetime.datetime.now()),
+            )
+
+        if doTitle == "false" and doPublisher == "true" and doTags == "false":
+            search_metadatas = models.MetaData.objects.filter(
+                book__publisher__icontains=keyword,
+                created_at__range=(start_datetime, datetime.datetime.now()),
+            )
 
         if doTitle == "true" and doPublisher == "false" and doTags == "false":
             search_metadatas = models.MetaData.objects.filter(
-                book__title__icontains=keyword
+                book__title__icontains=keyword,
+                created_at__range=(start_datetime, datetime.datetime.now()),
             )
 
         serializer = serializers.MetaDataSerializer(

@@ -16,9 +16,9 @@ const DataTable = ({ tabledatas }) => {
   const [numberOfPage, setNumberOfPage] = useState(20);
   const [page, setPage] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [doSearchTitle, setDoSearchTitle] = useState(false);
-  const [doSearchPublisher, setDoSearchPublisher] = useState(false);
-  const [doSearchTags, setDoSearchTags] = useState(false);
+  const [doSearchTitle, setDoSearchTitle] = useState("false");
+  const [doSearchPublisher, setDoSearchPublisher] = useState("false");
+  const [doSearchTags, setDoSearchTags] = useState("false");
 
   // 최초 테이블 데이터 초기화 함수
   useEffect(() => {

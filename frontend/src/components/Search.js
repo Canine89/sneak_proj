@@ -15,22 +15,26 @@ const Search = ({ setSearchKeyword, setDoSearchTitle, setDoSearchPublisher, setD
   };
 
   const onChangeDoSearchTitle = (event) => {
-    console.log(event.target.checked);
-    setDoSearchTitle(event.target.checked);
+    setDoSearchTitle(event.target.checked.toString());
   }
 
   const onChangeDoSearchPublisher = (event) => {
-    setDoSearchPublisher(event.target.checked);
+    setDoSearchPublisher(event.target.checked.toString());
   }
 
   const onChangeDoSearchTags = (event) => {
-    setDoSearchTags(event.target.checked);
+    setDoSearchTags(event.target.checked.toString());
   }
 
   const onSubmit = (event) => {
     event.preventDefault();
     setSearchKeyword(keyword);
   };
+
+  const onClickInitTable = (event) => {
+    event.preventDefault();
+    setSearchKeyword("");
+  }
 
   return (
     <form onSubmit={onSubmit}>
@@ -54,6 +58,7 @@ const Search = ({ setSearchKeyword, setDoSearchTitle, setDoSearchPublisher, setD
           <Checkbox onChange={onChangeDoSearchTags}>카테고리+태그</Checkbox>
         </Stack>
         <Button type="submit">검색!</Button>
+        <Button onClick={onClickInitTable}>초기화</Button>
       </Grid>
     </form>
   );
