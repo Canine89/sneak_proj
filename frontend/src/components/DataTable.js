@@ -16,9 +16,9 @@ const DataTable = ({ tabledatas }) => {
   const [numberOfPage, setNumberOfPage] = useState(20);
   const [page, setPage] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [doSearchTitle, setDoSearchTitle] = useState("false");
-  const [doSearchPublisher, setDoSearchPublisher] = useState("false");
-  const [doSearchTags, setDoSearchTags] = useState("false");
+  const [doSearchTitle, setDoSearchTitle] = useState('false');
+  const [doSearchPublisher, setDoSearchPublisher] = useState('false');
+  const [doSearchTags, setDoSearchTags] = useState('false');
 
   // 최초 테이블 데이터 초기화 함수
   useEffect(() => {
@@ -60,11 +60,21 @@ const DataTable = ({ tabledatas }) => {
       const temp = [];
       const getBooksData = async () => {
         console.log(doSearchTitle, doSearchPublisher, doSearchTags);
-        const result = await axios.get('http://localhost:8000/books/search/?keyword=' + searchKeyword + '&title=' + doSearchTitle + '&publisher=' + doSearchPublisher + '&tags=' + doSearchTags, {
-          headers: {
-            Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
+        const result = await axios.get(
+          'http://localhost:8000/books/search/?keyword=' +
+            searchKeyword +
+            '&title=' +
+            doSearchTitle +
+            '&publisher=' +
+            doSearchPublisher +
+            '&tags=' +
+            doSearchTags,
+          {
+            headers: {
+              Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
+            },
           },
-        });
+        );
         console.log(result.data);
         result.data.forEach((element) => {
           const {
@@ -110,6 +120,7 @@ const DataTable = ({ tabledatas }) => {
       <DataTableRow
         key={index}
         rank={tabledata.rank}
+        sales_point={tabledata.sales_point}
         title={tabledata.title}
         publisher={tabledata.publisher}
         market={tabledata.market}
@@ -168,24 +179,31 @@ const DataTable = ({ tabledatas }) => {
 
   return (
     <Grid>
-      <Search setSearchKeyword={setSearchKeyword} setDoSearchTitle={setDoSearchTitle} setDoSearchPublisher={setDoSearchPublisher} setDoSearchTags={setDoSearchTags} />
+      <Search
+        setSearchKeyword={setSearchKeyword}
+        setDoSearchTitle={setDoSearchTitle}
+        setDoSearchPublisher={setDoSearchPublisher}
+        setDoSearchTags={setDoSearchTags}
+      />
       <Table striped size="sm">
         <Thead>
           <Tr>
             <Th onClick={changeOrder} data-key="rank">
-              rank {orderTarget === 'rank' ? (isAsc ? '▲' : '▼') : null}
+              순위 {orderTarget === 'rank' ? (isAsc ? '▲' : '▼') : null}
+            </Th>
+            <Th onClick={changeOrder} data-key="sales_point">
+              판매지수 {orderTarget === 'rank' ? (isAsc ? '▲' : '▼') : null}
             </Th>
             <Th onClick={changeOrder} data-key="title">
-              title {orderTarget === 'title' ? (isAsc ? '▲' : '▼') : null}
+              제목 {orderTarget === 'title' ? (isAsc ? '▲' : '▼') : null}
             </Th>
             <Th onClick={changeOrder} data-key="publisher">
-              publisher{' '}
-              {orderTarget === 'publisher' ? (isAsc ? '▲' : '▼') : null}
+              출판사 {orderTarget === 'publisher' ? (isAsc ? '▲' : '▼') : null}
             </Th>
             <Th onClick={changeOrder} data-key="market">
-              market {orderTarget === 'market' ? (isAsc ? '▲' : '▼') : null}
+              시장 {orderTarget === 'market' ? (isAsc ? '▲' : '▼') : null}
             </Th>
-            <Th>tags</Th>
+            <Th>카테고리+태그</Th>
           </Tr>
         </Thead>
         <Tbody>{DataTableRows}</Tbody>

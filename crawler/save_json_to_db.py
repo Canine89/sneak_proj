@@ -8,7 +8,7 @@ from django.conf import settings
 from pathlib import Path
 
 
-fileName = "./" + str(input())
+fileName = "./" + str(input()) + ".json"
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
