@@ -24,6 +24,9 @@ class SearchMarketMetaDatas(APIView):
             search_metadatas = models.MetaData.objects.filter(
                 book__title__icontains=keyword,
                 created_at__range=(start_datetime, datetime.datetime.now()),
+            ).filter(
+                book__publisher__icontains=keyword,
+                created_at__range=(start_datetime, datetime.datetime.now()),
             )
 
         if doTitle == "false" and doPublisher == "true" and doTags == "false":
