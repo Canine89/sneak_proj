@@ -9,4 +9,4 @@ class BookAdmin(admin.ModelAdmin):
 
 @admin.register(models.MetaData)
 class MetaAdmin(admin.ModelAdmin):
-    list_display = ("rank",)
+    list_display = ("rank", "created_at", "updated_at")

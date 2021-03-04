@@ -16,7 +16,7 @@ class Book(core_models.TimeStampedModel):
     tags = TaggableManager()
 
     def __str__(self):
-        return (self.title, self.created_at)
+        return self.title
 
 
 class MetaData(core_models.TimeStampedModel):

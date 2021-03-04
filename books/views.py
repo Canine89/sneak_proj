@@ -22,6 +22,8 @@ class SearchMarketMetaDatas(APIView):
         doTags = request.query_params.get("tags", None)
         search_metadatas = None
 
+        print(start_datetime, now_datetime)
+
         if doTitle == "false" and doPublisher == "false" and doTags == "false":
             search_metadatas = (
                 models.MetaData.objects.filter(
@@ -92,6 +94,23 @@ class SearchMarketMetaDatas(APIView):
             search_metadatas,
             many=True,
         )
+        return Response(data=serializer.data)
+
+
+class GetMetaDatas(APIView):
+    def get(self, request, format=None):
+        keyword = request.query_params.get("keyword", None)
+        print("isbn is ", keyword)
+        try:
+            search_metadatas = models.MetaData.objects.filter(Q(book__isbn=keyword))
+        except:
+            print("no metadata")
+
+        serializer = serializers.MetaDataSerializer(
+            search_metadatas,
+            many=True,
+        )
+
         return Response(data=serializer.data)
 
 

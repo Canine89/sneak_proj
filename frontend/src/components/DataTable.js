@@ -3,6 +3,7 @@ import DataTableRow from 'components/DataTableRow';
 import Search from 'components/Search';
 import Paging from 'components/Paging';
 import axios from 'axios';
+import Graph from 'components/Chart';
 
 import { Table, Grid, Thead, Tbody, Tr, Th } from '@chakra-ui/react';
 import { Button, ButtonGroup } from '@chakra-ui/react';
@@ -125,6 +126,7 @@ const DataTable = ({ tabledatas }) => {
         publisher={tabledata.publisher}
         market={tabledata.market}
         tags={tabledata.tags}
+        isbn={tabledata.isbn}
       />
     );
   });
@@ -210,6 +212,7 @@ const DataTable = ({ tabledatas }) => {
       </Table>
       {tablePaging()}
       <Paging setNumberOfPage={setNumberOfPage} setPage={setPage} />
+      <Graph />
     </Grid>
   );
 };
