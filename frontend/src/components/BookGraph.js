@@ -1,7 +1,7 @@
 import { Line } from 'react-chartjs-2';
 import { Grid, GridItem } from '@chakra-ui/react';
 
-const Graph = ({ metadataByIsbn }) => {
+const BookGraph = ({ metadataByIsbn }) => {
   console.log(metadataByIsbn);
   const title = metadataByIsbn[0].book.title;
   const labels = metadataByIsbn.map((data, index) => {
@@ -56,4 +56,4 @@ const Graph = ({ metadataByIsbn }) => {
   );
 };
 
-export default Graph;
+export default BookGraph;

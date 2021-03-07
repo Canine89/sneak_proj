@@ -114,6 +114,28 @@ class GetMetaDatas(APIView):
         return Response(data=serializer.data)
 
 
+class GetPublisherInfo(APIView):
+    def get(self, request, foramt=None):
+        try:
+            result = (
+                MetaData.objects.filter(
+                    Q(created_at__range=(start_datetime, now_datetime))
+                )
+                .values("book__publisher")
+                .annotate(Count("book__publisher"))
+                .order_by("-book__publisher__count")
+            )
+        except:
+            print("no publisher info")
+
+        serializer = serializers.MetaDataSerializer(
+            result,
+            many=True,
+        )
+
+        return Response(data=serializer.data)
+
+
 class ListEveryMarketMetaDatas(APIView):
     def get(self, request, format=None):
         yes24_top20_metadatas = models.MetaData.objects.filter(

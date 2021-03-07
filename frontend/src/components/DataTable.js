@@ -3,7 +3,7 @@ import DataTableRow from 'components/DataTableRow';
 import Search from 'components/Search';
 import Paging from 'components/Paging';
 import axios from 'axios';
-import Graph from 'components/Chart';
+import BookGraph from 'components/BookGraph';
 
 import { Table, Grid, Thead, Tbody, Tr, Th } from '@chakra-ui/react';
 import { Button, ButtonGroup } from '@chakra-ui/react';
@@ -14,8 +14,15 @@ const DataTable = ({ tabledatas }) => {
   const [originTabledatas, setOriginTabledatas] = useState([]);
   const [searchTabledatas, setSearchTabledatas] = useState([]);
   const [renderingTabledatas, setRenderingTabledatas] = useState([]);
+
+  // 출판사 분석 용
+  const [renderingPubdatas, setRenderingPubdatas] = useState([]);
+
+  // 클릭 시 책 데이터 보여주기
   const [clickedRow, setClickedRow] = useState(0);
   const [metadataByIsbn, setMetadataByIsbn] = useState([]);
+
+  // 페이징, 검색
   const [numberOfPage, setNumberOfPage] = useState(20);
   const [page, setPage] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -118,9 +125,9 @@ const DataTable = ({ tabledatas }) => {
     );
   }, [isAsc, searchTabledatas, numberOfPage, page]);
 
+  // 클릭 시 그래프 렌더링 함수
   useEffect(() => {
     if (clickedRow !== 0) {
-      console.log('clicked');
       const getRowData = async (clickedRow) => {
         console.log(clickedRow);
         const result = await axios.get(
@@ -138,6 +145,20 @@ const DataTable = ({ tabledatas }) => {
     }
   }, [clickedRow]);
 
+  // 출판사 그래프 렌더링 함수
+  useEffect(() => {
+    const getPubdatas = async () => {
+      const result = await axios.get('http://localhost:8000/books/pub/', {
+        headers: {
+          Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
+        },
+      });
+      console.log(result.data);
+    };
+    getPubdatas();
+  }, [searchTabledatas]);
+
+  // TableRow 리턴 함수
   const DataTableRows = renderingTabledatas.map((tabledata, index) => {
     return (
       <DataTableRow
@@ -236,7 +257,7 @@ const DataTable = ({ tabledatas }) => {
       {tablePaging()}
       <Paging setNumberOfPage={setNumberOfPage} setPage={setPage} />
       {metadataByIsbn.length > 0 ? (
-        <Graph metadataByIsbn={metadataByIsbn} />
+        <BookGraph metadataByIsbn={metadataByIsbn} />
       ) : (
         'loading...'
       )}
