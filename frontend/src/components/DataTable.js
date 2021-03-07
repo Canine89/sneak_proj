@@ -14,6 +14,8 @@ const DataTable = ({ tabledatas }) => {
   const [originTabledatas, setOriginTabledatas] = useState([]);
   const [searchTabledatas, setSearchTabledatas] = useState([]);
   const [renderingTabledatas, setRenderingTabledatas] = useState([]);
+  const [clickedRow, setClickedRow] = useState(0);
+  const [metadataByIsbn, setMetadataByIsbn] = useState([]);
   const [numberOfPage, setNumberOfPage] = useState(20);
   const [page, setPage] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -116,6 +118,26 @@ const DataTable = ({ tabledatas }) => {
     );
   }, [isAsc, searchTabledatas, numberOfPage, page]);
 
+  useEffect(() => {
+    if (clickedRow !== 0) {
+      console.log('clicked');
+      const getRowData = async (clickedRow) => {
+        console.log(clickedRow);
+        const result = await axios.get(
+          'http://localhost:8000/books/isbn/?keyword=' + clickedRow,
+          {
+            headers: {
+              Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
+            },
+          },
+        );
+        console.log(result.data);
+        setMetadataByIsbn(result.data);
+      };
+      getRowData(clickedRow);
+    }
+  }, [clickedRow]);
+
   const DataTableRows = renderingTabledatas.map((tabledata, index) => {
     return (
       <DataTableRow
@@ -127,6 +149,7 @@ const DataTable = ({ tabledatas }) => {
         market={tabledata.market}
         tags={tabledata.tags}
         isbn={tabledata.isbn}
+        setClickedRow={setClickedRow}
       />
     );
   });
@@ -212,7 +235,11 @@ const DataTable = ({ tabledatas }) => {
       </Table>
       {tablePaging()}
       <Paging setNumberOfPage={setNumberOfPage} setPage={setPage} />
-      <Graph />
+      {metadataByIsbn.length > 0 ? (
+        <Graph metadataByIsbn={metadataByIsbn} />
+      ) : (
+        'loading...'
+      )}
     </Grid>
   );
 };

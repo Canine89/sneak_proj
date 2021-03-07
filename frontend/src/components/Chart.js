@@ -1,24 +1,59 @@
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
+import { Grid, GridItem } from '@chakra-ui/react';
 
-const Graph = () => {
-  const expData = {
-    labels: ['긍정적', '부정적', '보통'],
+const Graph = ({ metadataByIsbn }) => {
+  console.log(metadataByIsbn);
+  const title = metadataByIsbn[0].book.title;
+  const labels = metadataByIsbn.map((data, index) => {
+    return data.created_at.substring(0, 10);
+  });
+  const sales_points = metadataByIsbn.map((data, index) => {
+    return data.sales_point;
+  });
+  const ranks = metadataByIsbn.map((data, index) => {
+    return data.rank;
+  });
+  const salesPointsData = {
+    labels: labels,
     datasets: [
       {
-        labels: ['긍정적', '부정적', '보통'],
-        data: [60, 13, 27],
+        label: title + '의 판매지수',
+        data: sales_points,
         borderWidth: 2,
         hoverBorderWidth: 3,
-        backgroundColor: [
-          'rgba(238, 102, 121, 1)',
-          'rgba(98, 181, 229, 1)',
-          'rgba(255, 198, 0, 1)',
-        ],
-        fill: true,
+        backgroundColor: [],
+        fill: false,
       },
     ],
   };
-  return <Bar data={expData} width={300} height={200}/>;
+  const ranksData = {
+    labels: labels,
+    datasets: [
+      {
+        label: title + '의 순위',
+        data: ranks,
+        borderWidth: 2,
+        hoverBorderWidth: 3,
+        backgroundColor: [],
+        fill: false,
+      },
+    ],
+  };
+  return (
+    <Grid
+      templateRows="repeat(1, 1fr)"
+      templateColumns="repeat(6, 1fr)"
+      gap={4}
+      pb={4}
+    >
+      <GridItem colSpan={3}>
+        <Line data={salesPointsData} />
+      </GridItem>
+      <GridItem colSpan={3}>
+        <Line data={ranksData} />
+      </GridItem>
+    </Grid>
+  );
 };
 
 export default Graph;

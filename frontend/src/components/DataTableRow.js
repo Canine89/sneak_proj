@@ -1,14 +1,23 @@
 import React from 'react';
 import { Tr, Td } from '@chakra-ui/react';
 
-const TableRow = ({ rank, sales_point, title, publisher, market, tags, isbn }) => {
+const TableRow = ({
+  rank,
+  sales_point,
+  title,
+  publisher,
+  market,
+  tags,
+  isbn,
+  setClickedRow,
+}) => {
   const tagsMaker = tags.map((element) => {
     return element + ' ';
   });
 
   // 그래프 렌더링 함수
   const renderingGraph = (event) => {
-    console.log(isbn);
+    setClickedRow(isbn);
   };
 
   return (

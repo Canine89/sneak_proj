@@ -26,4 +26,8 @@ urlpatterns = [
         regex=r"search",
         view=views.SearchMarketMetaDatas.as_view(),
     ),
+    url(
+        regex=r"isbn",
+        view=views.GetMetaDatas.as_view(),
+    ),
 ]
