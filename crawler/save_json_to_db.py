@@ -1,5 +1,6 @@
 import json
 import datetime
+from django.utils import timezone
 import re
 import os
 import django
@@ -79,6 +80,7 @@ def save_data(datas):
             book = book_models.Book.objects.get(isbn=isbn)
             print("이미 등록된 책이므로 DB 등록을 넘어갑니다.")
         except:
+            print(fileName[8:12], fileName[13:15], fileName[15:17])
             book = book_models.Book.objects.create(
                 title=title,
                 author=author,
@@ -89,6 +91,12 @@ def save_data(datas):
                 isbn=isbn,
                 url=url,
                 page=page,
+                crawl_date=datetime.datetime(
+                    year=int(fileName[8:12]),
+                    month=int(fileName[13:15]),
+                    day=int(fileName[15:17]),
+                    hour=12,
+                ),
             )
 
             for tag in tags:
@@ -101,7 +109,7 @@ def save_data(datas):
                 if (
                     book_models.MetaData.objects.filter(
                         book=book,
-                        created_at__range=(start_datetime, datetime.datetime.now()),
+                        crawl_date__range=(start_datetime, datetime.datetime.now()),
                     )[0].created_at
                     > start_datetime
                 ):
@@ -109,7 +117,16 @@ def save_data(datas):
             except:
                 print("이전에 등록된 Metadata가 없으므로 DB에 등록합니다.")
                 book_models.MetaData.objects.create(
-                    market=market, rank=rank, sales_point=sales_point, book=book
+                    market=market,
+                    rank=rank,
+                    sales_point=sales_point,
+                    book=book,
+                    crawl_date=datetime.datetime(
+                        year=int(fileName[8:12]),
+                        month=int(fileName[13:15]),
+                        day=int(fileName[15:17]),
+                        hour=12,
+                    ),
                 )
         else:
             print("책 정보가 없어 MetaData를 DB에 등록할 수 없습니다.")

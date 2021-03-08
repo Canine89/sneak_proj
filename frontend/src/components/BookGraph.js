@@ -5,7 +5,7 @@ const BookGraph = ({ metadataByIsbn }) => {
   console.log(metadataByIsbn);
   const title = metadataByIsbn[0].book.title;
   const labels = metadataByIsbn.map((data, index) => {
-    return data.created_at.substring(0, 10);
+    return data.crawl_date.substring(0, 10);
   });
   const sales_points = metadataByIsbn.map((data, index) => {
     return data.sales_point;
@@ -19,8 +19,8 @@ const BookGraph = ({ metadataByIsbn }) => {
       {
         label: title + '의 판매지수',
         data: sales_points,
-        borderWidth: 2,
-        hoverBorderWidth: 3,
+        borderWidth: 5,
+        hoverBorderWidth: 5,
         backgroundColor: [],
         fill: false,
       },
@@ -32,13 +32,23 @@ const BookGraph = ({ metadataByIsbn }) => {
       {
         label: title + '의 순위',
         data: ranks,
-        borderWidth: 2,
-        hoverBorderWidth: 3,
+        borderWidth: 5,
+        hoverBorderWidth: 5,
         backgroundColor: [],
         fill: false,
       },
     ],
   };
+
+  const options = {
+    scales: {
+      yAxes: [
+        {
+          reverse:true
+        },
+      ],
+    },
+  }
   return (
     <Grid
       templateRows="repeat(1, 1fr)"
@@ -50,7 +60,7 @@ const BookGraph = ({ metadataByIsbn }) => {
         <Line data={salesPointsData} />
       </GridItem>
       <GridItem colSpan={3}>
-        <Line data={ranksData} />
+        <Line data={ranksData} options={options}/>
       </GridItem>
     </Grid>
   );

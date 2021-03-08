@@ -14,6 +14,7 @@ class Book(core_models.TimeStampedModel):
     url = models.CharField(max_length=1024, default="none", null=False)
     page = models.IntegerField(null=True, blank=True)
     tags = TaggableManager()
+    crawl_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -24,6 +25,7 @@ class MetaData(core_models.TimeStampedModel):
     rank = models.IntegerField(null=True, blank=True)
     sales_point = models.IntegerField(null=True, blank=True)
     book = models.ForeignKey("Book", on_delete=models.CASCADE)
+    crawl_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.book.title

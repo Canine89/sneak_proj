@@ -11,6 +11,7 @@ start_datetime = now_datetime - datetime.timedelta(
     minutes=now_datetime.minute,
     seconds=now_datetime.second,
 )
+end_datetime = start_datetime + datetime.timedelta(hours=23, minutes=59, seconds=59)
 
 
 class SearchMarketMetaDatas(APIView):
@@ -22,12 +23,12 @@ class SearchMarketMetaDatas(APIView):
         doTags = request.query_params.get("tags", None)
         search_metadatas = None
 
-        print(start_datetime, now_datetime)
+        print(start_datetime, end_datetime)
 
         if doTitle == "false" and doPublisher == "false" and doTags == "false":
             search_metadatas = (
                 models.MetaData.objects.filter(
-                    Q(created_at__range=(start_datetime, now_datetime))
+                    Q(crawl_date__range=(start_datetime, end_datetime))
                 )
                 .filter(
                     Q(book__title__icontains=keyword)
@@ -40,25 +41,25 @@ class SearchMarketMetaDatas(APIView):
         if doTitle == "false" and doPublisher == "true" and doTags == "false":
             search_metadatas = models.MetaData.objects.filter(
                 book__publisher__icontains=keyword,
-                created_at__range=(start_datetime, now_datetime),
+                crawl_date__range=(start_datetime, end_datetime),
             ).distinct()
 
         if doTitle == "true" and doPublisher == "false" and doTags == "false":
             search_metadatas = models.MetaData.objects.filter(
                 book__title__icontains=keyword,
-                created_at__range=(start_datetime, now_datetime),
+                crawl_date__range=(start_datetime, end_datetime),
             ).distinct()
 
         if doTitle == "false" and doPublisher == "false" and doTags == "true":
             search_metadatas = models.MetaData.objects.filter(
                 book__tags__name__in=keyword,
-                created_at__range=(start_datetime, now_datetime),
+                crawl_date__range=(start_datetime, end_datetime),
             ).distinct()
 
         if doTitle == "true" and doPublisher == "true" and doTags == "false":
             search_metadatas = (
                 models.MetaData.objects.filter(
-                    Q(created_at__range=(start_datetime, now_datetime))
+                    Q(crawl_date__range=(start_datetime, end_datetime))
                 )
                 .filter(
                     Q(book__title__icontains=keyword)
@@ -70,7 +71,7 @@ class SearchMarketMetaDatas(APIView):
         if doTitle == "true" and doPublisher == "false" and doTags == "true":
             search_metadatas = (
                 models.MetaData.objects.filter(
-                    Q(created_at__range=(start_datetime, now_datetime))
+                    Q(crawl_date__range=(start_datetime, end_datetime))
                 )
                 .filter(
                     Q(book__title__icontains=keyword) | Q(book__tags__name__in=keyword)
@@ -81,7 +82,7 @@ class SearchMarketMetaDatas(APIView):
         if doTitle == "false" and doPublisher == "true" and doTags == "true":
             search_metadatas = (
                 models.MetaData.objects.filter(
-                    Q(created_at__range=(start_datetime, now_datetime))
+                    Q(crawl_date__range=(start_datetime, end_datetime))
                 )
                 .filter(
                     Q(book__tags__name__in=keyword)
@@ -114,38 +115,38 @@ class GetMetaDatas(APIView):
         return Response(data=serializer.data)
 
 
-class GetPublisherInfo(APIView):
-    def get(self, request, foramt=None):
-        try:
-            result = (
-                MetaData.objects.filter(
-                    Q(created_at__range=(start_datetime, now_datetime))
-                )
-                .values("book__publisher")
-                .annotate(Count("book__publisher"))
-                .order_by("-book__publisher__count")
-            )
-        except:
-            print("no publisher info")
+# class GetPublisherInfo(APIView):
+#     def get(self, request, foramt=None):
+#         try:
+#             result = (
+#                 MetaData.objects.filter(
+#                     Q(crawl_date__range=(start_datetime, end_datetime))
+#                 )
+#                 .values("book__publisher")
+#                 .annotate(Count("book__publisher"))
+#                 .order_by("-book__publisher__count")
+#             )
+#         except:
+#             print("no publisher info")
 
-        serializer = serializers.MetaDataSerializer(
-            result,
-            many=True,
-        )
+#         serializer = serializers.MetaDataSerializer(
+#             result,
+#             many=True,
+#         )
 
-        return Response(data=serializer.data)
+#         return Response(data=serializer.data)
 
 
 class ListEveryMarketMetaDatas(APIView):
     def get(self, request, format=None):
         yes24_top20_metadatas = models.MetaData.objects.filter(
-            market="yes24", created_at__range=(start_datetime, now_datetime)
+            market="yes24", crawl_date__range=(start_datetime, end_datetime)
         )
         kyobo_top20_metadatas = models.MetaData.objects.filter(
-            market="kyobo", created_at__range=(start_datetime, now_datetime)
+            market="kyobo", crawl_date__range=(start_datetime, end_datetime)
         )
         aladin_top20_metadatas = models.MetaData.objects.filter(
-            market="aladin", created_at__range=(start_datetime, now_datetime)
+            market="aladin", crawl_date__range=(start_datetime, end_datetime)
         )
 
         serializer = serializers.MetaDataSerializer(

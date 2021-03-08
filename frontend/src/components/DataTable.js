@@ -146,6 +146,7 @@ const DataTable = ({ tabledatas }) => {
   }, [clickedRow]);
 
   // 출판사 그래프 렌더링 함수
+  /*
   useEffect(() => {
     const getPubdatas = async () => {
       const result = await axios.get('http://localhost:8000/books/pub/', {
@@ -157,6 +158,7 @@ const DataTable = ({ tabledatas }) => {
     };
     getPubdatas();
   }, [searchTabledatas]);
+  */
 
   // TableRow 리턴 함수
   const DataTableRows = renderingTabledatas.map((tabledata, index) => {
@@ -238,7 +240,7 @@ const DataTable = ({ tabledatas }) => {
               순위 {orderTarget === 'rank' ? (isAsc ? '▲' : '▼') : null}
             </Th>
             <Th onClick={changeOrder} data-key="sales_point">
-              판매지수 {orderTarget === 'rank' ? (isAsc ? '▲' : '▼') : null}
+              판매지수 {orderTarget === 'sales_point' ? (isAsc ? '▲' : '▼') : null}
             </Th>
             <Th onClick={changeOrder} data-key="title">
               제목 {orderTarget === 'title' ? (isAsc ? '▲' : '▼') : null}
