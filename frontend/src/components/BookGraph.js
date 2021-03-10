@@ -36,6 +36,7 @@ const BookGraph = ({ metadataByIsbn }) => {
         hoverBorderWidth: 5,
         backgroundColor: [],
         fill: false,
+        yAxisID: 'left-y-axis'
       },
     ],
   };
@@ -44,7 +45,12 @@ const BookGraph = ({ metadataByIsbn }) => {
     scales: {
       yAxes: [
         {
-          reverse:true
+          id: 'left-y-axis',
+          type: 'linear',
+          position: 'left',
+          ticks:{
+            reverse: true
+          }
         },
       ],
     },

@@ -18,6 +18,7 @@ class SearchMarketMetaDatas(APIView):
     def get(self, request, format=None):
         keyword = request.query_params.get("keyword", None)
         tagsKeyword = keyword.split(",")
+        print(tagsKeyword)
         doTitle = request.query_params.get("title", None)
         doPublisher = request.query_params.get("publisher", None)
         doTags = request.query_params.get("tags", None)
@@ -52,9 +53,10 @@ class SearchMarketMetaDatas(APIView):
 
         if doTitle == "false" and doPublisher == "false" and doTags == "true":
             search_metadatas = models.MetaData.objects.filter(
-                book__tags__name__in=keyword,
+                book__tags__name__in=tagsKeyword,
                 crawl_date__range=(start_datetime, end_datetime),
-            ).distinct()
+            )
+            print(search_metadatas)
 
         if doTitle == "true" and doPublisher == "true" and doTags == "false":
             search_metadatas = (
