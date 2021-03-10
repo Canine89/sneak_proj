@@ -1,5 +1,5 @@
 {
-  "python.pythonPath": "/Users/canine/.virtualenvs/myenv/bin/python",
+  "python.pythonPath": "C:\\Users\\phk70\\AppData\\Local\\Programs\\Python\\Python39\\python.exe",
   "python.linting.flake8Enabled": true,
   "python.linting.pylintEnabled": false,
   "python.linting.enabled": true,

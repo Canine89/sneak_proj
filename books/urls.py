@@ -30,4 +30,8 @@ urlpatterns = [
         regex=r"isbn",
         view=views.GetMetaDatas.as_view(),
     ),
+    url(
+        regex=r"pub",
+        view=views.GetPublisherInfo.as_view(),
+    ),
 ]

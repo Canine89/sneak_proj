@@ -116,6 +116,7 @@ def save_data(datas):
                     print("오늘 등록된 Metadata이므로 DB에 등록하지 않습니다.")
             except:
                 print("이전에 등록된 Metadata가 없으므로 DB에 등록합니다.")
+                print(fileName[8:12], fileName[13:15], fileName[15:17])
                 book_models.MetaData.objects.create(
                     market=market,
                     rank=rank,

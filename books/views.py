@@ -1,8 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
+from django.http import JsonResponse
 from . import models, serializers
 import datetime
 from django.db.models import Q
+from django.db.models import Avg, Case, Count, F, Max, Min, Prefetch, Q, Sum, When
 
 # datetime 계산용
 now_datetime = datetime.datetime.now()
@@ -93,6 +96,8 @@ class SearchMarketMetaDatas(APIView):
                 .distinct()
             )
 
+        print(search_metadatas)
+
         serializer = serializers.MetaDataSerializer(
             search_metadatas,
             many=True,
@@ -103,9 +108,13 @@ class SearchMarketMetaDatas(APIView):
 class GetMetaDatas(APIView):
     def get(self, request, format=None):
         keyword = request.query_params.get("keyword", None)
-        print("isbn is ", keyword)
+        # print("isbn is ", keyword)
         try:
-            search_metadatas = models.MetaData.objects.filter(Q(book__isbn=keyword))
+            search_metadatas = models.MetaData.objects.filter(
+                Q(book__isbn=keyword)
+            ).order_by("crawl_date")
+            # for item in search_metadatas:
+            #     print(item.crawl_date)
         except:
             print("no metadata")
 
@@ -113,30 +122,26 @@ class GetMetaDatas(APIView):
             search_metadatas,
             many=True,
         )
+        print(serializer.data)
 
         return Response(data=serializer.data)
 
 
-# class GetPublisherInfo(APIView):
-#     def get(self, request, foramt=None):
-#         try:
-#             result = (
-#                 MetaData.objects.filter(
-#                     Q(crawl_date__range=(start_datetime, end_datetime))
-#                 )
-#                 .values("book__publisher")
-#                 .annotate(Count("book__publisher"))
-#                 .order_by("-book__publisher__count")
-#             )
-#         except:
-#             print("no publisher info")
+class GetPublisherInfo(APIView):
+    def get(self, request, format=None):
+        try:
+            search_metadatas = (
+                models.MetaData.objects.filter(
+                    Q(crawl_date__range=(start_datetime, end_datetime))
+                )
+                .values("book__publisher")
+                .annotate(Count("book__publisher"))
+                .order_by("-book__publisher__count")
+            )
+        except:
+            print("no publisher info")
 
-#         serializer = serializers.MetaDataSerializer(
-#             result,
-#             many=True,
-#         )
-
-#         return Response(data=serializer.data)
+        return JsonResponse(data=list(search_metadatas), safe=False)
 
 
 class ListEveryMarketMetaDatas(APIView):

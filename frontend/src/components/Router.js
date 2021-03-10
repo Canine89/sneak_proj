@@ -12,7 +12,7 @@ import { HashRouter as Route, Switch } from 'react-router-dom';
 
 const AppRouter = ({ isLoggedIn, setIsLoggedIn }) => {
   return (
-    <Container maxW="12xl">
+    <Container maxW="12xl" >
       <Navitaion isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       <Switch>
         {isLoggedIn ? (

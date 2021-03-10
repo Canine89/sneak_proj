@@ -12,17 +12,24 @@ const Paging = ({ setNumberOfPage, setPage }) => {
   };
 
   return (
-    <ButtonGroup spacing="2" mt={2}>
-      <Button onClick={onClick} value="10" size="sm">
+    <ButtonGroup spacing="2" mt={2} al>
+      <Button size="xs" isDisabled>열 개수 설정(보고서는 1이 적절합니다)</Button>
+      <Button onClick={onClick} value="1" size="xs">
+        1
+      </Button>
+      <Button onClick={onClick} value="5" size="xs">
+        5
+      </Button>
+      <Button onClick={onClick} value="10" size="xs">
         10
       </Button>
-      <Button onClick={onClick} value="20" size="sm">
+      <Button onClick={onClick} value="20" size="xs">
         20
       </Button>
-      <Button onClick={onClick} value="50" size="sm">
+      <Button onClick={onClick} value="50" size="xs">
         50
       </Button>
-      <Button onClick={onClick} value="100" size="sm">
+      <Button onClick={onClick} value="100" size="xs">
         100
       </Button>
     </ButtonGroup>

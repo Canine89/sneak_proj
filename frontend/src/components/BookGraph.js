@@ -48,7 +48,7 @@ const BookGraph = ({ metadataByIsbn }) => {
           id: 'left-y-axis',
           type: 'linear',
           position: 'left',
-          ticks:{
+          ticks: {
             reverse: true
           }
         },
@@ -61,12 +61,13 @@ const BookGraph = ({ metadataByIsbn }) => {
       templateColumns="repeat(6, 1fr)"
       gap={4}
       pb={4}
+      mt={4}
     >
       <GridItem colSpan={3}>
         <Line data={salesPointsData} />
       </GridItem>
       <GridItem colSpan={3}>
-        <Line data={ranksData} options={options}/>
+        <Line data={ranksData} options={options} />
       </GridItem>
     </Grid>
   );

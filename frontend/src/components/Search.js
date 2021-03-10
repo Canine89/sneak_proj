@@ -46,7 +46,7 @@ const Search = ({
         <Input
           name="keyword"
           type="text"
-          placeholder="검색어를 입력하세요"
+          placeholder="검색어를 입력하세요(enter 검색 지금 안 됨)"
           onChange={onChange}
         />
       </GridItem>

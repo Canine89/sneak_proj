@@ -8,7 +8,7 @@ const Kyobo = () => {
 
   useEffect(() => {
     const getBooksData = async () => {
-      const result = await axios.get('http://localhost:8000/books/kyobo/', {
+      const result = await axios.get('http://192.168.0.81:8000/books/kyobo/', {
         headers: {
           Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
         },

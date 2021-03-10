@@ -7,6 +7,7 @@ import BookGraph from 'components/BookGraph';
 
 import { Table, Grid, Thead, Tbody, Tr, Th } from '@chakra-ui/react';
 import { Button, ButtonGroup } from '@chakra-ui/react';
+import PubGraph from './PubGraph';
 
 const DataTable = ({ tabledatas }) => {
   const [isAsc, setIsAsc] = useState(true);
@@ -71,14 +72,14 @@ const DataTable = ({ tabledatas }) => {
       const getBooksData = async () => {
         console.log(doSearchTitle, doSearchPublisher, doSearchTags);
         const result = await axios.get(
-          'http://localhost:8000/books/search/?keyword=' +
-            searchKeyword +
-            '&title=' +
-            doSearchTitle +
-            '&publisher=' +
-            doSearchPublisher +
-            '&tags=' +
-            doSearchTags,
+          'http://192.168.0.81:8000/books/search/?keyword=' +
+          searchKeyword +
+          '&title=' +
+          doSearchTitle +
+          '&publisher=' +
+          doSearchPublisher +
+          '&tags=' +
+          doSearchTags,
           {
             headers: {
               Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
@@ -115,6 +116,7 @@ const DataTable = ({ tabledatas }) => {
         setSearchTabledatas(temp);
       };
       getBooksData();
+      setPage(0); // 검색 후 0 페이지로 초기화
     }
   }, [searchKeyword, originTabledatas]);
 
@@ -131,7 +133,7 @@ const DataTable = ({ tabledatas }) => {
       const getRowData = async (clickedRow) => {
         console.log(clickedRow);
         const result = await axios.get(
-          'http://localhost:8000/books/isbn/?keyword=' + clickedRow,
+          'http://192.168.0.81:8000/books/isbn/?keyword=' + clickedRow,
           {
             headers: {
               Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
@@ -182,16 +184,20 @@ const DataTable = ({ tabledatas }) => {
     const tableLength = searchTabledatas.length;
     const pagingLength = Math.ceil(tableLength / numberOfPage);
     const paging = [...Array(pagingLength).keys()];
+    const pagingMaker = paging.map((element, index) => {
+      return (
+        <Button key={index} onClick={() => setPage(element)} size="xs" isActive={element === page ? true : false}>
+          {element + 1}
+        </Button>
+      );
+    });
+
+    const frontPaging = pagingMaker.slice(page, page + 5);
+    const rearPaging = pagingMaker.slice(pagingLength - 5, pagingLength);
 
     return (
       <ButtonGroup spacing="1" mt={2}>
-        {paging.map((element, index) => {
-          return (
-            <Button key={index} onClick={() => setPage(element)} size="xs">
-              {element + 1}
-            </Button>
-          );
-        })}
+        { frontPaging} <Button size="xs">...</Button> { rearPaging}
       </ButtonGroup>
     );
   };
@@ -233,7 +239,7 @@ const DataTable = ({ tabledatas }) => {
         setDoSearchPublisher={setDoSearchPublisher}
         setDoSearchTags={setDoSearchTags}
       />
-      <Table striped size="sm">
+      <Table striped size="sm" maxW="12xl">
         <Thead>
           <Tr>
             <Th onClick={changeOrder} data-key="rank">
@@ -263,6 +269,7 @@ const DataTable = ({ tabledatas }) => {
       ) : (
         'loading...'
       )}
+      <PubGraph />
     </Grid>
   );
 };
