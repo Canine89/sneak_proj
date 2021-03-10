@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import { Pie } from 'react-chartjs-2';
 import { Grid, GridItem } from '@chakra-ui/react';
+import { Table, Thead, Tbody, Tr, Th } from '@chakra-ui/react';
 
 const PubGraph = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -11,7 +12,7 @@ const PubGraph = () => {
 
   useEffect(() => {
     const getPubData = async () => {
-      const result = await axios.get('http://192.168.0.81:8000/books/pub/', {
+      const result = await axios.get('http://localhost:8000/books/pub/', {
         headers: {
           Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
         },
@@ -66,7 +67,17 @@ const PubGraph = () => {
         <Pie data={pubsData} options={options} />
       </GridItem>
       <GridItem colSpan={3}>
-        <Pie data={pubsData} />
+        <Table>
+          <Thead>
+            <th>출판사</th>
+            <th>600위 내 종수</th>
+          </Thead>
+          <Tbody>
+            {pubName.map((name, index) => {
+              return <tr>{name}</tr>;
+            })}
+          </Tbody>
+        </Table>
       </GridItem>
     </Grid>
   );

@@ -72,14 +72,14 @@ const DataTable = ({ tabledatas }) => {
       const getBooksData = async () => {
         console.log(doSearchTitle, doSearchPublisher, doSearchTags);
         const result = await axios.get(
-          'http://192.168.0.81:8000/books/search/?keyword=' +
-          searchKeyword +
-          '&title=' +
-          doSearchTitle +
-          '&publisher=' +
-          doSearchPublisher +
-          '&tags=' +
-          doSearchTags,
+          'http://localhost:8000/books/search/?keyword=' +
+            searchKeyword +
+            '&title=' +
+            doSearchTitle +
+            '&publisher=' +
+            doSearchPublisher +
+            '&tags=' +
+            doSearchTags,
           {
             headers: {
               Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
@@ -133,7 +133,7 @@ const DataTable = ({ tabledatas }) => {
       const getRowData = async (clickedRow) => {
         console.log(clickedRow);
         const result = await axios.get(
-          'http://192.168.0.81:8000/books/isbn/?keyword=' + clickedRow,
+          'http://localhost:8000/books/isbn/?keyword=' + clickedRow,
           {
             headers: {
               Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
@@ -186,7 +186,12 @@ const DataTable = ({ tabledatas }) => {
     const paging = [...Array(pagingLength).keys()];
     const pagingMaker = paging.map((element, index) => {
       return (
-        <Button key={index} onClick={() => setPage(element)} size="xs" isActive={element === page ? true : false}>
+        <Button
+          key={index}
+          onClick={() => setPage(element)}
+          size="xs"
+          isActive={element === page ? true : false}
+        >
           {element + 1}
         </Button>
       );
@@ -197,7 +202,7 @@ const DataTable = ({ tabledatas }) => {
 
     return (
       <ButtonGroup spacing="1" mt={2}>
-        { frontPaging} <Button size="xs">...</Button> { rearPaging}
+        {frontPaging} <Button size="xs">...</Button> {rearPaging}
       </ButtonGroup>
     );
   };
@@ -246,7 +251,8 @@ const DataTable = ({ tabledatas }) => {
               순위 {orderTarget === 'rank' ? (isAsc ? '▲' : '▼') : null}
             </Th>
             <Th onClick={changeOrder} data-key="sales_point">
-              판매지수 {orderTarget === 'sales_point' ? (isAsc ? '▲' : '▼') : null}
+              판매지수{' '}
+              {orderTarget === 'sales_point' ? (isAsc ? '▲' : '▼') : null}
             </Th>
             <Th onClick={changeOrder} data-key="title">
               제목 {orderTarget === 'title' ? (isAsc ? '▲' : '▼') : null}

@@ -36,25 +36,61 @@ const BookGraph = ({ metadataByIsbn }) => {
         hoverBorderWidth: 5,
         backgroundColor: [],
         fill: false,
-        yAxisID: 'left-y-axis'
+        yAxisID: 'left-y-axis',
       },
     ],
   };
 
-  const options = {
+  const rank_options = {
     scales: {
+      xAxes: [
+        {
+          ticks: {
+            autoSkip: true,
+            maxTicksLimit: 30,
+            maxRotation: 90,
+            minRotation: 90,
+          },
+        },
+      ],
       yAxes: [
         {
           id: 'left-y-axis',
           type: 'linear',
           position: 'left',
           ticks: {
-            reverse: true
-          }
+            reverse: true,
+          },
         },
       ],
     },
-  }
+  };
+
+  const sales_options = {
+    scales: {
+      xAxes: [
+        {
+          ticks: {
+            autoSkip: true,
+            maxTicksLimit: 30,
+            maxRotation: 90,
+            minRotation: 90,
+          },
+        },
+      ],
+      yAxes: [
+        {
+          id: 'left-y-axis',
+          type: 'linear',
+          position: 'left',
+          ticks: {
+            reverse: false,
+          },
+        },
+      ],
+    },
+  };
+
   return (
     <Grid
       templateRows="repeat(1, 1fr)"
@@ -64,10 +100,10 @@ const BookGraph = ({ metadataByIsbn }) => {
       mt={4}
     >
       <GridItem colSpan={3}>
-        <Line data={salesPointsData} />
+        <Line data={salesPointsData} options={sales_options} />
       </GridItem>
       <GridItem colSpan={3}>
-        <Line data={ranksData} options={options} />
+        <Line data={ranksData} options={rank_options} />
       </GridItem>
     </Grid>
   );
