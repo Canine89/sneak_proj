@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, GridItem, Center } from '@chakra-ui/react';
+import { Grid, Center } from '@chakra-ui/react';
 
 const Main = () => {
   return (

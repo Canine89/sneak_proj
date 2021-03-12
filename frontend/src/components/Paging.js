@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, ButtonGroup } from '@chakra-ui/react';
 
 const Paging = ({ setNumberOfPage, setPage }) => {
-  const [number, setNumber] = useState(20);
   const onClick = (event) => {
     const {
       target: { value },

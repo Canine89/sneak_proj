@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import { Pie } from 'react-chartjs-2';
 import { Grid, GridItem } from '@chakra-ui/react';
-import { Table, Thead, Tbody, Tr, Th } from '@chakra-ui/react';
+import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 
 const PubAnalysisTable = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -33,7 +32,6 @@ const PubAnalysisTable = () => {
         }),
       );
       setIsLoading(false);
-      console.log(result.data);
     };
     getPubData();
   }, []);
@@ -66,7 +64,6 @@ const PubAnalysisTable = () => {
         }, 0),
       );
       setIsLoading2(false);
-      console.log(result.data);
     };
     getSalesPubData();
   }, []);
@@ -82,7 +79,7 @@ const PubAnalysisTable = () => {
       mt={4}
     >
       <GridItem colSpan={2}>
-        <Table>
+        <Table size="sm">
           <Thead>
             <Th>출판사</Th>
             <Th>600위 내 종수</Th>
@@ -91,8 +88,8 @@ const PubAnalysisTable = () => {
             {pubName.map((name, index) => {
               return (
                 <Tr>
-                  <td>{name}</td>
-                  <td>{pubCount[index].toLocaleString()}</td>
+                  <Td>{name}</Td>
+                  <Td>{pubCount[index].toLocaleString()}</Td>
                 </Tr>
               );
             })}
@@ -100,11 +97,11 @@ const PubAnalysisTable = () => {
         </Table>
       </GridItem>
       <GridItem colSpan={3}>
-        <Table>
+        <Table size="sm">
           <Thead>
             <Th>출판사</Th>
             <Th>
-              600위 내 판매지수 합(전체: {totalSalesPoint.toLocaleString()})
+              판매지수 합(전체: {totalSalesPoint.toLocaleString()})
             </Th>
             <Th>
               판매지수/종수
@@ -114,9 +111,9 @@ const PubAnalysisTable = () => {
             {salesPubName.map((name, index) => {
               return (
                 <Tr>
-                  <td>{name}</td>
-                  <td>{salesPubCount[index].toLocaleString()}</td>
-                  <td>{parseInt(salesBookPubCount[index]).toLocaleString()}</td>
+                  <Td>{name}</Td>
+                  <Td>{salesPubCount[index].toLocaleString()}</Td>
+                  <Td>{parseInt(salesBookPubCount[index]).toLocaleString()}</Td>
                 </Tr>
               );
             })}

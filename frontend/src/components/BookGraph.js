@@ -1,24 +1,21 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import { Grid, GridItem } from '@chakra-ui/react';
 
-const BookGraph = ({ metadataByIsbn }) => {
-  console.log(metadataByIsbn);
-  const title = metadataByIsbn[0].book.title;
-  const labels = metadataByIsbn.map((data, index) => {
-    return data.crawl_date.substring(0, 10);
-  });
-  const sales_points = metadataByIsbn.map((data, index) => {
-    return data.sales_point;
-  });
-  const ranks = metadataByIsbn.map((data, index) => {
-    return data.rank;
-  });
+const BookGraph = ({ clickedRow }) => {
+  const [metadatas, setMetadatas] = useState([]);
+  const [title, setTitle] = useState('');
+  const [labels, setLabels] = useState([]);
+  const [salesPoints, setSalesPoints] = useState([]);
+  const [ranks, setRanks] = useState([]);
+
   const salesPointsData = {
     labels: labels,
     datasets: [
       {
         label: title + '의 판매지수',
-        data: sales_points,
+        data: salesPoints,
         borderWidth: 5,
         hoverBorderWidth: 5,
         backgroundColor: [],
@@ -40,7 +37,6 @@ const BookGraph = ({ metadataByIsbn }) => {
       },
     ],
   };
-
   const rank_options = {
     scales: {
       xAxes: [
@@ -65,7 +61,6 @@ const BookGraph = ({ metadataByIsbn }) => {
       ],
     },
   };
-
   const sales_options = {
     scales: {
       xAxes: [
@@ -91,6 +86,43 @@ const BookGraph = ({ metadataByIsbn }) => {
     },
   };
 
+  // 클릭 시 그래프 렌더링 함수
+  useEffect(() => {
+    const getRowData = async (clickedRow) => {
+      const result = await axios.get(
+        'http://192.168.0.81:8000/books/isbn/?keyword=' + clickedRow,
+        {
+          headers: {
+            Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
+          },
+        },
+      );
+      setMetadatas(result.data);
+    };
+    getRowData(clickedRow);
+  }, [clickedRow]);
+
+  useEffect(() => {
+    if (metadatas.length > 0) {
+      setTitle(metadatas[0].book.title);
+      setLabels(
+        metadatas.map((data, index) => {
+          return data.crawl_date.substring(0, 10);
+        }),
+      );
+      setSalesPoints(
+        metadatas.map((data, index) => {
+          return data.sales_point;
+        }),
+      );
+      setRanks(
+        metadatas.map((data, index) => {
+          return data.rank;
+        }),
+      );
+    }
+  }, [metadatas]);
+
   return (
     <Grid
       templateRows="repeat(1, 1fr)"
@@ -99,10 +131,10 @@ const BookGraph = ({ metadataByIsbn }) => {
       pb={4}
       mt={4}
     >
-      <GridItem colSpan={3}>
+      <GridItem colSpan={2}>
         <Line data={salesPointsData} options={sales_options} />
       </GridItem>
-      <GridItem colSpan={3}>
+      <GridItem colSpan={2}>
         <Line data={ranksData} options={rank_options} />
       </GridItem>
     </Grid>

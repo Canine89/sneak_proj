@@ -1,16 +1,14 @@
 import React from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import { Input, Button, Grid, Heading } from '@chakra-ui/react';
+import { useHistory } from 'react-router-dom';
+import { Grid } from '@chakra-ui/react';
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  BreadcrumbSeparator,
 } from '@chakra-ui/react';
 
 const Navitaion = ({ isLoggedIn, setIsLoggedIn }) => {
   const history = useHistory();
-  const location = useLocation();
 
   // 로그아웃 처리 함수
   const onClick = () => {

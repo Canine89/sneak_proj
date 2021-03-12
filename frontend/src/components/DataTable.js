@@ -5,9 +5,12 @@ import Paging from 'components/Paging';
 import axios from 'axios';
 import BookGraph from 'components/BookGraph';
 
-import { Table, Grid, Thead, Tbody, Tr, Th } from '@chakra-ui/react';
-import { Button, ButtonGroup } from '@chakra-ui/react';
+import { Table, Thead, Tbody, Th } from '@chakra-ui/react';
+import { Grid, GridItem } from '@chakra-ui/react';
+
+import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react';
 import PubGraph from './PubAnalysisTable';
+import Pagiantion from './Pagination';
 
 const DataTable = ({ tabledatas }) => {
   const [isAsc, setIsAsc] = useState(true);
@@ -16,12 +19,8 @@ const DataTable = ({ tabledatas }) => {
   const [searchTabledatas, setSearchTabledatas] = useState([]);
   const [renderingTabledatas, setRenderingTabledatas] = useState([]);
 
-  // 출판사 분석 용
-  const [renderingPubdatas, setRenderingPubdatas] = useState([]);
-
   // 클릭 시 책 데이터 보여주기
   const [clickedRow, setClickedRow] = useState(0);
-  const [metadataByIsbn, setMetadataByIsbn] = useState([]);
 
   // 페이징, 검색
   const [numberOfPage, setNumberOfPage] = useState(20);
@@ -61,7 +60,7 @@ const DataTable = ({ tabledatas }) => {
       });
     });
     setOriginTabledatas(tempTabledatas);
-  }, []);
+  }, [tabledatas]);
 
   // 테이블 데이터 검색 로직 함수
   useEffect(() => {
@@ -118,7 +117,13 @@ const DataTable = ({ tabledatas }) => {
       getBooksData();
       setPage(0); // 검색 후 0 페이지로 초기화
     }
-  }, [searchKeyword, originTabledatas]);
+  }, [
+    searchKeyword,
+    originTabledatas,
+    doSearchPublisher,
+    doSearchTags,
+    doSearchTitle,
+  ]);
 
   // 테이블 데이터 렌더링 함수
   useEffect(() => {
@@ -126,41 +131,6 @@ const DataTable = ({ tabledatas }) => {
       searchTabledatas.slice(page * numberOfPage, numberOfPage * (page + 1)),
     );
   }, [isAsc, searchTabledatas, numberOfPage, page]);
-
-  // 클릭 시 그래프 렌더링 함수
-  useEffect(() => {
-    if (clickedRow !== 0) {
-      const getRowData = async (clickedRow) => {
-        console.log(clickedRow);
-        const result = await axios.get(
-          'http://192.168.0.81:8000/books/isbn/?keyword=' + clickedRow,
-          {
-            headers: {
-              Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
-            },
-          },
-        );
-        console.log(result.data);
-        setMetadataByIsbn(result.data);
-      };
-      getRowData(clickedRow);
-    }
-  }, [clickedRow]);
-
-  // 출판사 그래프 렌더링 함수
-  /*
-  useEffect(() => {
-    const getPubdatas = async () => {
-      const result = await axios.get('http://192.168.0.81:8000/books/pub/', {
-        headers: {
-          Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
-        },
-      });
-      console.log(result.data);
-    };
-    getPubdatas();
-  }, [searchTabledatas]);
-  */
 
   // TableRow 리턴 함수
   const DataTableRows = renderingTabledatas.map((tabledata, index) => {
@@ -178,48 +148,6 @@ const DataTable = ({ tabledatas }) => {
       />
     );
   });
-
-  // 페이징 함수
-  const tablePaging = () => {
-    const tableLength = searchTabledatas.length;
-    const pagingLength = Math.ceil(tableLength / numberOfPage);
-    const paging = [...Array(pagingLength).keys()];
-    const pagingMaker = paging.map((element, index) => {
-      return (
-        <Button
-          key={index}
-          onClick={() => setPage(element)}
-          size="xs"
-          isActive={element === page ? true : false}
-        >
-          {element + 1}
-        </Button>
-      );
-    });
-
-    const frontPaging = pagingMaker.slice(page, page + 5);
-    const rearPaging = pagingMaker.slice(pagingLength - 5, pagingLength);
-
-    return (
-      <ButtonGroup spacing="1" mt={2}>
-        {page > 0 ? (
-          <Button size="xs" onClick={() => setPage(page - 1)}>
-            ←
-          </Button>
-        ) : (
-          ''
-        )}
-        {frontPaging} <Button size="xs">...</Button> {rearPaging}
-        {page < 50 ? (
-          <Button size="xs" onClick={() => setPage(page + 1)}>
-            →
-          </Button>
-        ) : (
-          ''
-        )}
-      </ButtonGroup>
-    );
-  };
 
   // 정렬 함수
   const changeOrder = (event) => {
@@ -260,34 +188,52 @@ const DataTable = ({ tabledatas }) => {
       />
       <Table striped size="sm" maxW="12xl">
         <Thead>
-          <Tr>
-            <Th onClick={changeOrder} data-key="rank">
-              순위 {orderTarget === 'rank' ? (isAsc ? '▲' : '▼') : null}
-            </Th>
-            <Th onClick={changeOrder} data-key="sales_point">
-              판매지수{' '}
-              {orderTarget === 'sales_point' ? (isAsc ? '▲' : '▼') : null}
-            </Th>
-            <Th onClick={changeOrder} data-key="title">
-              제목 {orderTarget === 'title' ? (isAsc ? '▲' : '▼') : null}
-            </Th>
-            <Th onClick={changeOrder} data-key="publisher">
-              출판사 {orderTarget === 'publisher' ? (isAsc ? '▲' : '▼') : null}
-            </Th>
-            <Th onClick={changeOrder} data-key="market">
-              시장 {orderTarget === 'market' ? (isAsc ? '▲' : '▼') : null}
-            </Th>
-            <Th>카테고리+태그</Th>
-          </Tr>
+          <Th onClick={changeOrder} data-key="rank">
+            순위 {orderTarget === 'rank' ? (isAsc ? '▲' : '▼') : null}
+          </Th>
+          <Th onClick={changeOrder} data-key="sales_point">
+            판매지수{' '}
+            {orderTarget === 'sales_point' ? (isAsc ? '▲' : '▼') : null}
+          </Th>
+          <Th onClick={changeOrder} data-key="title">
+            제목 {orderTarget === 'title' ? (isAsc ? '▲' : '▼') : null}
+          </Th>
+          <Th onClick={changeOrder} data-key="publisher">
+            출판사 {orderTarget === 'publisher' ? (isAsc ? '▲' : '▼') : null}
+          </Th>
+          <Th onClick={changeOrder} data-key="market">
+            시장 {orderTarget === 'market' ? (isAsc ? '▲' : '▼') : null}
+          </Th>
+          <Th>카테고리+태그</Th>
         </Thead>
         <Tbody>{DataTableRows}</Tbody>
       </Table>
-      {tablePaging()}
+      <Pagiantion
+        numberOfPage={numberOfPage}
+        page={page}
+        setPage={setPage}
+        searchTabledatas={searchTabledatas}
+      />
       <Paging setNumberOfPage={setNumberOfPage} setPage={setPage} />
-      {metadataByIsbn.length > 0 ? (
-        <BookGraph metadataByIsbn={metadataByIsbn} />
+      {clickedRow ? (
+        <BookGraph clickedRow={clickedRow} />
       ) : (
-        'loading...'
+        <>
+          <Grid
+            templateRows="repeat(1, 1fr)"
+            templateColumns="repeat(6, 1fr)"
+            gap={4}
+            pb={4}
+            mt={4}
+          >
+            <GridItem colSpan={2}>
+              <Skeleton width="577px" height="288px" mt={4} mb={4} />
+            </GridItem>
+            <GridItem colSpan={2}>
+              <Skeleton width="577px" height="288px" mt={4} mb={4} />
+            </GridItem>
+          </Grid>
+        </>
       )}
       <PubGraph />
     </Grid>
