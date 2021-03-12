@@ -60,6 +60,7 @@ const DataTable = ({ tabledatas }) => {
       });
     });
     setOriginTabledatas(tempTabledatas);
+    console.log(tempTabledatas)
   }, [tabledatas]);
 
   // 테이블 데이터 검색 로직 함수
@@ -69,7 +70,6 @@ const DataTable = ({ tabledatas }) => {
     } else {
       const temp = [];
       const getBooksData = async () => {
-        console.log(doSearchTitle, doSearchPublisher, doSearchTags);
         const result = await axios.get(
           'http://192.168.0.81:8000/books/search/?keyword=' +
             searchKeyword +
@@ -85,7 +85,6 @@ const DataTable = ({ tabledatas }) => {
             },
           },
         );
-        console.log(result.data);
         result.data.forEach((element) => {
           const {
             title,
@@ -139,6 +138,8 @@ const DataTable = ({ tabledatas }) => {
         key={index}
         rank={tabledata.rank}
         sales_point={tabledata.sales_point}
+        publish_date={tabledata.publish_date}
+        crawl_date={tabledata.crawl_date}
         title={tabledata.title}
         publisher={tabledata.publisher}
         market={tabledata.market}
@@ -194,6 +195,10 @@ const DataTable = ({ tabledatas }) => {
           <Th onClick={changeOrder} data-key="sales_point">
             판매지수{' '}
             {orderTarget === 'sales_point' ? (isAsc ? '▲' : '▼') : null}
+          </Th>
+          <Th onClick={changeOrder} data-key="publish_date">
+            출간월
+            {orderTarget === 'publish_date' ? (isAsc ? '▲' : '▼') : null}
           </Th>
           <Th onClick={changeOrder} data-key="title">
             제목 {orderTarget === 'title' ? (isAsc ? '▲' : '▼') : null}

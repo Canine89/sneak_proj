@@ -8,7 +8,7 @@ const Yes24 = () => {
 
   useEffect(() => {
     const getBooksData = async () => {
-      const result = await axios.get('http://192.168.0.81:3000/books/yes24/', {
+      const result = await axios.get('http://192.168.0.81:8000/books/yes24/', {
         headers: {
           Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
         },
