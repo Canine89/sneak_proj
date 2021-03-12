@@ -8,7 +8,7 @@ import BookGraph from 'components/BookGraph';
 import { Table, Thead, Tbody, Th } from '@chakra-ui/react';
 import { Grid, GridItem } from '@chakra-ui/react';
 
-import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react';
+import { CircularProgress } from '@chakra-ui/react';
 import PubGraph from './PubAnalysisTable';
 import Pagiantion from './Pagination';
 
@@ -227,10 +227,10 @@ const DataTable = ({ tabledatas }) => {
             mt={4}
           >
             <GridItem colSpan={2}>
-              <Skeleton width="577px" height="288px" mt={4} mb={4} />
+              <CircularProgress isIndeterminate color="green.300" />
             </GridItem>
             <GridItem colSpan={2}>
-              <Skeleton width="577px" height="288px" mt={4} mb={4} />
+              <CircularProgress isIndeterminate color="green.300" />
             </GridItem>
           </Grid>
         </>
