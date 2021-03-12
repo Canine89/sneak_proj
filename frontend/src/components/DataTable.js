@@ -202,7 +202,21 @@ const DataTable = ({ tabledatas }) => {
 
     return (
       <ButtonGroup spacing="1" mt={2}>
+        {page > 0 ? (
+          <Button size="xs" onClick={() => setPage(page - 1)}>
+            ←
+          </Button>
+        ) : (
+          ''
+        )}
         {frontPaging} <Button size="xs">...</Button> {rearPaging}
+        {page < 50 ? (
+          <Button size="xs" onClick={() => setPage(page + 1)}>
+            →
+          </Button>
+        ) : (
+          ''
+        )}
       </ButtonGroup>
     );
   };
