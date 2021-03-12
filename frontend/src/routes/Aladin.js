@@ -7,7 +7,7 @@ const Aladin = () => {
 
   useEffect(() => {
     const getBooksData = async () => {
-      const result = await axios.get('http://localhost:8000/books/aladin/', {
+      const result = await axios.get('http://192.168.0.81:3000/books/aladin/', {
         headers: {
           Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
         },

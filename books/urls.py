@@ -34,4 +34,8 @@ urlpatterns = [
         regex=r"pub",
         view=views.GetPublisherInfo.as_view(),
     ),
+    url(
+        regex=r"sales",
+        view=views.GetPubSalesPointInfo.as_view(),
+    ),
 ]

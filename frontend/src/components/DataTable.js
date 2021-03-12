@@ -7,7 +7,7 @@ import BookGraph from 'components/BookGraph';
 
 import { Table, Grid, Thead, Tbody, Tr, Th } from '@chakra-ui/react';
 import { Button, ButtonGroup } from '@chakra-ui/react';
-import PubGraph from './PubGraph';
+import PubGraph from './PubAnalysisTable';
 
 const DataTable = ({ tabledatas }) => {
   const [isAsc, setIsAsc] = useState(true);
@@ -72,7 +72,7 @@ const DataTable = ({ tabledatas }) => {
       const getBooksData = async () => {
         console.log(doSearchTitle, doSearchPublisher, doSearchTags);
         const result = await axios.get(
-          'http://localhost:8000/books/search/?keyword=' +
+          'http://192.168.0.81:8000/books/search/?keyword=' +
             searchKeyword +
             '&title=' +
             doSearchTitle +
@@ -133,7 +133,7 @@ const DataTable = ({ tabledatas }) => {
       const getRowData = async (clickedRow) => {
         console.log(clickedRow);
         const result = await axios.get(
-          'http://localhost:8000/books/isbn/?keyword=' + clickedRow,
+          'http://192.168.0.81:8000/books/isbn/?keyword=' + clickedRow,
           {
             headers: {
               Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
@@ -151,7 +151,7 @@ const DataTable = ({ tabledatas }) => {
   /*
   useEffect(() => {
     const getPubdatas = async () => {
-      const result = await axios.get('http://localhost:8000/books/pub/', {
+      const result = await axios.get('http://192.168.0.81:8000/books/pub/', {
         headers: {
           Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
         },

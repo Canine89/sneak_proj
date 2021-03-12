@@ -4,7 +4,6 @@ from rest_framework import status
 from django.http import JsonResponse
 from . import models, serializers
 import datetime
-from django.db.models import Q
 from django.db.models import Avg, Case, Count, F, Max, Min, Prefetch, Q, Sum, When
 
 # datetime 계산용
@@ -140,6 +139,24 @@ class GetPublisherInfo(APIView):
             )
         except:
             print("no publisher info")
+
+        return JsonResponse(data=list(search_metadatas), safe=False)
+
+
+class GetPubSalesPointInfo(APIView):
+    def get(self, request, format=None):
+        try:
+            search_metadatas = (
+                models.MetaData.objects.filter(
+                    Q(crawl_date__range=(start_datetime, end_datetime))
+                )
+                .values("book__publisher")
+                .annotate(Sum("sales_point"))
+                .annotate(Count("book__publisher"))
+                .order_by("-sales_point__sum")
+            )
+        except:
+            print("no pub_salespoint info")
 
         return JsonResponse(data=list(search_metadatas), safe=False)
 
