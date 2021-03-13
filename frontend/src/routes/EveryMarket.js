@@ -8,9 +8,9 @@ const EveryMarket = () => {
 
   useEffect(() => {
     const getBooksData = async () => {
-      console.log('http://192.168.0.81:8000/books/everymarket/');
+      console.log('http://localhost:8000/books/everymarket/');
       const result = await axios.get(
-        'http://192.168.0.81:8000/books/everymarket/',
+        'http://localhost:8000/books/everymarket/',
         {
           headers: {
             Authorization: 'JWT ' + localStorage.getItem('jwt-token'),

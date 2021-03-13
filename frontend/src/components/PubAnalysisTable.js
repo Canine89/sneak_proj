@@ -16,7 +16,7 @@ const PubAnalysisTable = () => {
 
   useEffect(() => {
     const getPubData = async () => {
-      const result = await axios.get('http://192.168.0.81:8000/books/pub/', {
+      const result = await axios.get('http://localhost:8000/books/pub/', {
         headers: {
           Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
         },
@@ -38,7 +38,7 @@ const PubAnalysisTable = () => {
 
   useEffect(() => {
     const getSalesPubData = async () => {
-      const result = await axios.get('http://192.168.0.81:8000/books/sales/', {
+      const result = await axios.get('http://localhost:8000/books/sales/', {
         headers: {
           Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
         },
@@ -54,7 +54,7 @@ const PubAnalysisTable = () => {
         }),
       );
       setSalesBookPubCount(
-        result.data.slice(0, 15).map((data, index)=>{
+        result.data.slice(0, 15).map((data, index) => {
           return data.sales_point__sum / data.book__publisher__count
         })
       )

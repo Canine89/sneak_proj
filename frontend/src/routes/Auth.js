@@ -10,7 +10,7 @@ const Auth = ({ setIsLoggedIn }) => {
     event.preventDefault();
 
     const loginAndSetJWT = async (username, password) => {
-      const base_url = 'http://192.168.0.81:8000/';
+      const base_url = 'http://localhost:8000/';
       const jwt_token_url = 'api-token-auth/';
 
       console.log(base_url)
