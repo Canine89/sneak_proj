@@ -177,6 +177,7 @@ class ListEveryMarketMetaDatas(APIView):
             yes24_top20_metadatas | kyobo_top20_metadatas | aladin_top20_metadatas,
             many=True,
         )
+
         return Response(data=serializer.data)
 
 
