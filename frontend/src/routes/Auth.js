@@ -13,8 +13,6 @@ const Auth = ({ setIsLoggedIn }) => {
       const base_url = 'http://localhost:8000/';
       const jwt_token_url = 'api-token-auth/';
 
-      console.log(base_url)
-
       await axios
         .post(
           base_url + jwt_token_url,
@@ -30,7 +28,6 @@ const Auth = ({ setIsLoggedIn }) => {
           console.log(err);
         });
 
-      console.log(localStorage.getItem('jwt-token'));
       if (localStorage.getItem('jwt-token')) {
         setIsLoggedIn(true);
       }
