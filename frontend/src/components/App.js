@@ -7,11 +7,10 @@ import axios from 'axios';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const history = useHistory();
-  
+
   useEffect(() => {
     if (localStorage.getItem('jwt-token')) setIsLoggedIn(true);
-    setInterval(checkJWT, 1000 * 5);
+    setInterval(checkJWT, 1000 * 60);
   }, []);
 
   // jwt token 만료 검사?
@@ -31,7 +30,6 @@ function App() {
         console.log(err);
         localStorage.removeItem('jwt-token');
         setIsLoggedIn(false);
-        history.push('/');
       });
     console.log('called checkJWT');
   };

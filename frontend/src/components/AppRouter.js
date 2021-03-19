@@ -12,7 +12,7 @@ import { HashRouter as Route, Switch } from 'react-router-dom';
 
 const AppRouter = ({ isLoggedIn, setIsLoggedIn }) => {
   return (
-    <Container maxW="12xl" >
+    <Container maxW="12xl">
       <Navitaion isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       <Switch>
         {isLoggedIn ? (
@@ -24,9 +24,16 @@ const AppRouter = ({ isLoggedIn, setIsLoggedIn }) => {
             <Auth setIsLoggedIn={setIsLoggedIn} />
           </Route>
         )}
-        <Route exact path="/everymarket">
-          <EveryMarket />
-        </Route>
+        {isLoggedIn ? (
+          <Route exact path="/everymarket">
+            <EveryMarket />
+          </Route>
+        ) : (
+          <Route>
+            <Auth setIsLoggedIn={setIsLoggedIn} />
+          </Route>
+        )}
+
         <Route exact path="/yes24">
           <Yes24 />
         </Route>
