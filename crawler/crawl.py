@@ -87,8 +87,11 @@ class Crawler:
                 )
                 result_data[bookinfo_key]["isbn"] = make_integer_from_string(
                     soup.select(
-                        ".tb_vertical > tbody:nth-child(3) > tr:nth-child(3) > td:nth-child(2)"
+                        "#infoset_specific > div.infoSetCont_wrap > div > table > tbody > tr:nth-of-type(3) > td"
                     )[0].text
+
+                    # //*[@id="infoset_specific"]/div[2]/div/table/tbody/tr[3]/td
+                    # #infoset_specific > div.infoSetCont_wrap > div > table > tbody > tr:nth-of-type(3) > td
                 )
 
                 # 쪽수확인중 값 처리를 위해 try...except 문 삽입

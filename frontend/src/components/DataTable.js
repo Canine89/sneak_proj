@@ -71,7 +71,7 @@ const DataTable = ({ tabledatas }) => {
       const temp = [];
       const getBooksData = async () => {
         const result = await axios.get(
-          'http://192.168.0.81:8000/books/search/?keyword=' +
+          'http://localhost:8000/books/search/?keyword=' +
           searchKeyword +
           '&title=' +
           doSearchTitle +

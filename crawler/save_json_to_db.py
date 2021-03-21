@@ -9,7 +9,7 @@ from django.conf import settings
 from pathlib import Path
 
 
-fileName = "./" + str(input()) + ".json"
+fileName = "./yes24_json_dump/" + str(input()) + ".json"
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
@@ -80,7 +80,7 @@ def save_data(datas):
             book = book_models.Book.objects.get(isbn=isbn)
             print("이미 등록된 책이므로 DB 등록을 넘어갑니다.")
         except:
-            print(fileName[8:12], fileName[13:15], fileName[15:17])
+            print(fileName[8+16:12+16], fileName[13+16:15+16], fileName[15+16:17+16])
             book = book_models.Book.objects.create(
                 title=title,
                 author=author,
@@ -92,9 +92,9 @@ def save_data(datas):
                 url=url,
                 page=page,
                 crawl_date=datetime.datetime(
-                    year=int(fileName[8:12]),
-                    month=int(fileName[13:15]),
-                    day=int(fileName[15:17]),
+                    year=int(fileName[8+16:12+16]),
+                    month=int(fileName[13+16:15+16]),
+                    day=int(fileName[15+16:17+16]),
                     hour=12,
                 ),
             )
@@ -116,16 +116,16 @@ def save_data(datas):
                     print("오늘 등록된 Metadata이므로 DB에 등록하지 않습니다.")
             except:
                 print("이전에 등록된 Metadata가 없으므로 DB에 등록합니다.")
-                print(fileName[8:12], fileName[13:15], fileName[15:17])
+                print(fileName[8+16:12+16], fileName[13+16:15+16], fileName[15+16:17+16])
                 book_models.MetaData.objects.create(
                     market=market,
                     rank=rank,
                     sales_point=sales_point,
                     book=book,
                     crawl_date=datetime.datetime(
-                        year=int(fileName[8:12]),
-                        month=int(fileName[13:15]),
-                        day=int(fileName[15:17]),
+                        year=int(fileName[8+16:12+16]),
+                        month=int(fileName[13+16:15+16]),
+                        day=int(fileName[15+16:17+16]),
                         hour=12,
                     ),
                 )

@@ -17,7 +17,7 @@ function App() {
   const checkJWT = async () => {
     await axios
       .post(
-        'http://192.168.0.81:8000/api-token-auth/verify/',
+        'http://localhost:8000/api-token-auth/verify/',
         JSON.stringify({ token: localStorage.getItem('jwt-token') }),
         {
           headers: { 'Content-Type': 'application/json' },
