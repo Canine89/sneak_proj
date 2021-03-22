@@ -90,7 +90,7 @@ const BookGraph = ({ clickedRow }) => {
   useEffect(() => {
     const getRowData = async (clickedRow) => {
       const result = await axios.get(
-        'http://localhost:8000/books/isbn/?keyword=' + clickedRow,
+        'http://192.168.0.81:8000/books/isbn/?keyword=' + clickedRow,
         {
           headers: {
             Authorization: 'JWT ' + localStorage.getItem('jwt-token'),
