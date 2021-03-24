@@ -4,6 +4,7 @@ from rest_framework import status
 from django.http import JsonResponse
 from . import models, serializers
 import datetime
+import requests
 from django.db.models import Avg, Case, Count, F, Max, Min, Prefetch, Q, Sum, When
 
 # datetime 계산용
@@ -14,6 +15,33 @@ start_datetime = now_datetime - datetime.timedelta(
     seconds=now_datetime.second,
 )
 end_datetime = start_datetime + datetime.timedelta(hours=23, minutes=59, seconds=59)
+
+
+class SendAlarm(APIView):
+    def get(self, request, format=None):
+        keyword = "점프 투 파이썬"
+        try:
+            search_metadatas = models.MetaData.objects.filter(
+                book__title__icontains=keyword
+            )
+            serializer = serializers.MetaDataSerializer(
+                search_metadatas,
+                many=True,
+            )
+
+            TARGET_URL = "https://notify-api.line.me/api/notify"
+            TOKEN = "pntorMZyLEqhCqORzaBbpCHF9bAx0aPvhU0Wlezl5U8"
+
+            response = requests.post(
+                TARGET_URL,
+                headers={"Authorization": "Bearer " + TOKEN},
+                data={"message": "안녕하세요. LINE Notify 테스트입니다."},
+            )
+
+        except:
+            print("error...")
+
+        return Response(data="good")
 
 
 class SearchMarketMetaDatas(APIView):

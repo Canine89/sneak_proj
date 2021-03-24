@@ -38,4 +38,8 @@ urlpatterns = [
         regex=r"sales",
         view=views.GetPubSalesPointInfo.as_view(),
     ),
+    url(
+        regex=r"alarm",
+        view=views.SendAlarm.as_view(),
+    ),
 ]
