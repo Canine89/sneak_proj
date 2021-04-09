@@ -36,7 +36,7 @@ class Crawler:
         # 크롤링
         for page in range(1, MAX_PAGE + 1):
             req = requests.get(
-                "http://www.yes24.com/24/Category/More/001001044?ElemNo=104&ElemSeq=1&PageNumber="
+                "http://www.yes24.com/24/Category/More/001001003?ElemNo=104&ElemSeq=7&PageNumber="
                 + str(page)
             )
             html = req.text
