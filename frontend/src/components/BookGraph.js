@@ -6,6 +6,8 @@ import { Grid, GridItem } from '@chakra-ui/react';
 const BookGraph = ({ clickedRow }) => {
   const [metadatas, setMetadatas] = useState([]);
   const [title, setTitle] = useState('');
+  const [avgRank, setAvgRank] = useState(0);
+  const [avgSalesPoint, setAvgSalesPoint] = useState(0);
   const [labels, setLabels] = useState([]);
   const [salesPoints, setSalesPoints] = useState([]);
   const [ranks, setRanks] = useState([]);
@@ -14,7 +16,7 @@ const BookGraph = ({ clickedRow }) => {
     labels: labels,
     datasets: [
       {
-        label: title + '의 판매지수',
+        label: title + '의 판매지수' + '(avg: ' + avgSalesPoint + ')',
         data: salesPoints,
         borderWidth: 5,
         hoverBorderWidth: 5,
@@ -27,7 +29,7 @@ const BookGraph = ({ clickedRow }) => {
     labels: labels,
     datasets: [
       {
-        label: title + '의 순위',
+        label: title + '의 순위' + '(avg: ' + avgRank + ')',
         data: ranks,
         borderWidth: 5,
         hoverBorderWidth: 5,
@@ -104,7 +106,19 @@ const BookGraph = ({ clickedRow }) => {
 
   useEffect(() => {
     if (metadatas.length > 0) {
+      const rankAvg =
+        metadatas.reduce((sum, curr) => {
+          return sum + curr.rank;
+        }, 0) / metadatas.length;
+      const salesPointAvg =
+        metadatas.reduce((sum, curr) => {
+          return sum + curr.sales_point;
+        }, 0) / metadatas.length;
+
       setTitle(metadatas[0].book.title);
+      setAvgRank(Math.round(rankAvg));
+      setAvgSalesPoint(Math.round(salesPointAvg));
+
       setLabels(
         metadatas.map((data, index) => {
           return data.crawl_date.substring(0, 10);

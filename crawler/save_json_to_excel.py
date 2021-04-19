@@ -36,9 +36,19 @@ for _file in os.listdir(filePath):
     row = 2
 
     for key, value in json_data.items():
+        print(json_data)
         title = value["title"]
-        price = value["right_price"]
-        author = ",".join(value["author"])
+        try:
+            price = value["right_price"]
+        except:
+            print(value["right_price"])
+            price = "미정"
+
+        try:
+            author = ",".join(value["author"])
+        except:
+            author = "미정"
+
         publisher = value["publisher"]
         date_of_publish = value["publish_date"]
         rank = value["rank"]

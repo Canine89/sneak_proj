@@ -8,8 +8,7 @@ import sys
 from django.conf import settings
 from pathlib import Path
 
-
-fileName = "./yes24_json_dump/" + str(input()) + ".json"
+folderName = "./yes24_json_dump/"
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
@@ -49,7 +48,7 @@ def make_nospace_string(string_data):
     return string_data.replace(" ", "")
 
 
-def save_data(datas):
+def save_data(datas, fileName):
     # datetime 계산용
     now_datetime = datetime.datetime.now()
     start_datetime = now_datetime - datetime.timedelta(
@@ -58,19 +57,75 @@ def save_data(datas):
         seconds=now_datetime.second,
     )
 
+    if (
+        book_models.MetaData.objects.filter(
+            crawl_date__range=(
+                start_datetime,
+                datetime.datetime(
+                    now_datetime.year,
+                    now_datetime.month,
+                    now_datetime.day,
+                    hour=23,
+                    minute=59,
+                    second=59,
+                ),
+            ),
+        ).count()
+        == 600
+    ):
+        print("일 데이터가 600이므로 다음 날로 넘어갑니다.")
+        return -1
+
     for key, value in datas.items():
         title = value["title"]
-        author = value["author"]
-        publisher = value["publisher"]
-        publish_date = make_datetime_from_string(value["publish_date"])
-        right_price = value["right_price"]
-        sales_price = value["sales_price"]
-        isbn = value["isbn"]
+        try:
+            author = value["author"]
+        except:
+            author = "미정"
+
+        try:
+            publisher = value["publisher"]
+        except:
+            publisher = "미정"
+
+        try:
+            publish_date = make_datetime_from_string(value["publish_date"])
+        except:
+            publish_date = datetime.datetime(year=1999, month=1, day=1)
+
+        try:
+            right_price = value["right_price"]
+        except:
+            right_price = 0
+
+        try:
+            sales_price = value["sales_price"]
+        except:
+            sales_price = 0
+
+        try:
+            isbn = value["isbn"]
+        except:
+            isbn = 0
+
         url = value["url"]
-        page = value["page"]
-        tags = value["tags"]
+
+        try:
+            page = value["page"]
+        except:
+            page = 0
+
+        try:
+            tags = value["tags"]
+        except:
+            tags = ["미정"]
+
         rank = value["rank"]
-        sales_point = value["sales_point"]
+
+        try:
+            sales_point = value["sales_point"]
+        except:
+            sales_point = 0
 
         # 임시로 yes24로 등록(크롤러 업데이트 후 다음 코드로 변경 예정)
         # market = value["market"]
@@ -80,7 +135,11 @@ def save_data(datas):
             book = book_models.Book.objects.get(isbn=isbn)
             print("이미 등록된 책이므로 DB 등록을 넘어갑니다.")
         except:
-            print(fileName[8+16:12+16], fileName[13+16:15+16], fileName[15+16:17+16])
+            print(
+                fileName[6:10],
+                fileName[11:13],
+                fileName[13:15],
+            )
             book = book_models.Book.objects.create(
                 title=title,
                 author=author,
@@ -92,9 +151,9 @@ def save_data(datas):
                 url=url,
                 page=page,
                 crawl_date=datetime.datetime(
-                    year=int(fileName[8+16:12+16]),
-                    month=int(fileName[13+16:15+16]),
-                    day=int(fileName[15+16:17+16]),
+                    year=int(fileName[6:10]),
+                    month=int(fileName[11:13]),
+                    day=int(fileName[13:15]),
                     hour=12,
                 ),
             )
@@ -105,35 +164,26 @@ def save_data(datas):
             print("새 책의 DB 등록을 마쳤습니다.")
 
         if book is not None:
-            try:
-                if (
-                    book_models.MetaData.objects.filter(
-                        book=book,
-                        crawl_date__range=(start_datetime, datetime.datetime.now()),
-                    )[0].created_at
-                    > start_datetime
-                ):
-                    print("오늘 등록된 Metadata이므로 DB에 등록하지 않습니다.")
-            except:
-                print("이전에 등록된 Metadata가 없으므로 DB에 등록합니다.")
-                print(fileName[8+16:12+16], fileName[13+16:15+16], fileName[15+16:17+16])
-                book_models.MetaData.objects.create(
-                    market=market,
-                    rank=rank,
-                    sales_point=sales_point,
-                    book=book,
-                    crawl_date=datetime.datetime(
-                        year=int(fileName[8+16:12+16]),
-                        month=int(fileName[13+16:15+16]),
-                        day=int(fileName[15+16:17+16]),
-                        hour=12,
-                    ),
-                )
+            book_models.MetaData.objects.create(
+                market=market,
+                rank=rank,
+                sales_point=sales_point,
+                book=book,
+                crawl_date=datetime.datetime(
+                    year=int(fileName[6:10]),
+                    month=int(fileName[11:13]),
+                    day=int(fileName[13:15]),
+                    hour=12,
+                ),
+            )
+            print(book.title, "의 MetaData 등록을 마쳤습니다.")
         else:
             print("책 정보가 없어 MetaData를 DB에 등록할 수 없습니다.")
 
 
 if __name__ == "__main__":
-    with open(fileName, encoding="utf-8") as json_file:
-        json_data = json.load(json_file)
-        save_data(json_data)
+    for _file in os.listdir(folderName):
+        print(_file)
+        with open(folderName + _file, encoding="utf-8") as json_file:
+            json_data = json.load(json_file)
+            save_data(json_data, _file)
