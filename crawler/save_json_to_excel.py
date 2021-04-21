@@ -2,7 +2,7 @@ import os
 import json
 import datetime
 import openpyxl
-
+import pandas
 
 filePath = "./yes24_json_dump/"
 wb = openpyxl.Workbook()

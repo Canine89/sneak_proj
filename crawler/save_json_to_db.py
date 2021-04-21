@@ -60,11 +60,15 @@ def save_data(datas, fileName):
     if (
         book_models.MetaData.objects.filter(
             crawl_date__range=(
-                start_datetime,
                 datetime.datetime(
-                    now_datetime.year,
-                    now_datetime.month,
-                    now_datetime.day,
+                    year=int(fileName[6:10]),
+                    month=int(fileName[11:13]),
+                    day=int(fileName[13:15]),
+                ),
+                datetime.datetime(
+                    year=int(fileName[6:10]),
+                    month=int(fileName[11:13]),
+                    day=int(fileName[13:15]),
                     hour=23,
                     minute=59,
                     second=59,
